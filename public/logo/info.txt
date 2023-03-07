@@ -1,0 +1,14 @@
+
+Hope you enjoy your new logo, here are the people that
+made your beautiful logo happen :)
+font name: publicasans-regular
+font link: http://www.myfonts.com/fonts/facetype/publica-sans/regular/#index
+font author: FaceType
+font author site: http://www.facetype.org/
+
+
+icon designer: Cengiz SARI
+icon designer link: /cengizsari
+        
+{"bg":"transparent","icon":"#488eff","font":"#2e3034","slogan":"#424448"}
+      
