@@ -8,6 +8,7 @@
     "url": "git+https://github.com/mapldx/maven.git"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "firebase-admin": "^11.5.0"
   }
 }

@@ -50,13 +50,17 @@ import { ChevronRightIcon } from '@heroicons/vue/20/solid'
 import { WalletMultiButton, useWallet } from 'solana-wallets-vue'
 import { useToast } from "vue-toastification";
 
+import axios from 'axios'
+
 const { publicKey } = useWallet()
 const { wallet, program } = useAnchor()
 
 const toast = useToast();
-watch(wallet, () => {
+watch(wallet, async () => {
     if(wallet.value?.publicKey) {
+      await axios.post('http://localhost/api/auth', { address: wallet.value?.publicKey.toString() })
       toast('Successfully connected to wallet!')
+      navigateTo('/app')
     }
 })
 
