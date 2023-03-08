@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-full">
+  <div class="min-h-full" v-if="isLoaded">
     <NavBar />
 
     <div class="py-10" v-if="isLoaded">
@@ -78,12 +78,13 @@
         </div>
       </main>
     </div>
-    <div class="py-10" v-else>
-      <header>
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900">Loading...</h1>
-        </div>
-      </header>
+  </div>
+  <div class="min-h-screen" v-else>
+    <div class="grid">
+      <h1 class="font-extrabold text-3xl text-center my-16">
+        Loading...
+      </h1>
+      <div class="place-self-center animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-300"></div>
     </div>
   </div>
   <TransitionRoot appear :show="isOpen" as="template">
@@ -97,7 +98,7 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-black bg-opacity-25" />
+        <div class="fixed inset-0 bg-black bg-opacity-80" />
       </TransitionChild>
 
       <div class="fixed inset-0 overflow-y-auto">
@@ -151,7 +152,6 @@
 </template>
 
 <script setup>
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { ChatBubbleLeftEllipsisIcon, DocumentMagnifyingGlassIcon, DevicePhoneMobileIcon, PencilSquareIcon, Cog6ToothIcon } from '@heroicons/vue/20/solid'
 
 import { WalletMultiButton, useWallet } from 'solana-wallets-vue'
@@ -163,7 +163,6 @@ import { ref } from 'vue'
 import {
   Disclosure,
   DisclosurePanel,
-  DisclosureButton,
   TransitionRoot,
   TransitionChild,
   Dialog,
@@ -207,19 +206,22 @@ async function newForm() {
     })
 }
 
-var fetch = setInterval(async () => {
-  const data = {
-    address: await wallet.value?.publicKey.toString(),
-  }
-  axios.post('http://localhost/api/documents/get', data)
-    .then(res => {
-      docs.value = res.data
-      isLoaded.value = true
-    })
-    .catch(err => {
-      console.log(err)
-    })
-}, 1000)
+let fetch;
+onMounted(async () => {
+  fetch = setInterval(async () => {
+    const data = {
+      address: await wallet.value?.publicKey.toString(),
+    }
+    axios.post('http://localhost/api/documents/get', data)
+      .then(res => {
+        docs.value = res.data
+        isLoaded.value = true
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, 1000)
+})
 
 const docs = ref([])
 
@@ -227,5 +229,4 @@ onUpdated(async () => {
   clearInterval(fetch)
 })
 
-// const docs
 </script>

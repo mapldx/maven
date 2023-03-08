@@ -107,13 +107,11 @@ app.get('/api/forms/:target', async (req, res) => {
 })
 
 app.post('/api/documents/get', async (req, res) => {
-  try {
-    const address = req.body.address
+  const address = req.body.address
+  if (address != undefined) {
     const documents = db.collection('documents').doc(address)
     const doc = await documents.get()
     res.send(doc.data())
-  } catch (error) {
-    console.log(error)
   }
 })
 

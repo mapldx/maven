@@ -6,7 +6,7 @@
           <div class="flex flex-shrink-0 items-center">
             <img class="block h-8 w-auto lg:hidden" src="/logo/default.png" alt="Your Company" />
             <img class="hidden h-8 w-auto lg:block" src="/logo/default.png" alt="Your Company" />
-            <div class="flex ml-8">
+            <div class="flex ml-8" v-if="route.name != 'app'">
               <a href="/app">← Return to dashboard</a>
             </div>
           </div>
@@ -60,6 +60,9 @@
 import { WalletMultiButton, useWallet } from 'solana-wallets-vue'
 import { useToast } from "vue-toastification";
 
+import { DisclosureButton } from '@headlessui/vue'
+import { BellIcon } from '@heroicons/vue/24/outline'
+
 import {
   Disclosure,
   DisclosurePanel,
@@ -72,6 +75,8 @@ import {
 
 const { publicKey } = useWallet()
 const { wallet, program } = useAnchor()
+
+const route = useRoute()
 
 const toast = useToast();
 watch(wallet, () => {
