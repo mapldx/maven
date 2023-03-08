@@ -60,9 +60,14 @@ app.post('/api/forms/create', async (req, res) => {
   const doc = await documents.get()
 
   const formId = uniqid('form-', address)
+  var header = {
+    id: formId,
+    name: name,
+    desc: desc,
+  }
   if (doc.exists) {
     await documents.update({
-      forms: FieldValue.arrayUnion(formId)
+      forms: FieldValue.arrayUnion(header)
     });
   }
 
@@ -99,6 +104,17 @@ app.get('/api/forms/:target', async (req, res) => {
     formList.push(form.id)
   });
   res.send(formList)
+})
+
+app.post('/api/documents/get', async (req, res) => {
+  try {
+    const address = req.body.address
+    const documents = db.collection('documents').doc(address)
+    const doc = await documents.get()
+    res.send(doc.data())
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 app.listen(port, () => {

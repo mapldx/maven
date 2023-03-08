@@ -1,59 +1,8 @@
 <template>
   <div class="min-h-full">
-    <Disclosure as="nav" class="border-b border-gray-200 bg-white" v-slot="{ open }">
-      <div class="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-        <div class="flex h-16 justify-between">
-          <div class="flex">
-            <div class="flex flex-shrink-0 items-center">
-              <img class="block h-8 w-auto lg:hidden" src="/logo/default.png" alt="Your Company" />
-              <img class="hidden h-8 w-auto lg:block" src="/logo/default.png" alt="Your Company" />
-            </div>
-          </div>
-          <div class="hidden sm:ml-6 sm:flex sm:items-center">
-          <ClientOnly>
-            <WalletMultiButton />
-            <template #placeholder>
-              Loading
-            </template>
-          </ClientOnly>
-          </div>
-          <div class="-mr-2 flex items-center sm:hidden">
-            <ClientOnly>
-              <WalletMultiButton />
-              <template #placeholder>
-                Loading
-              </template>
-            </ClientOnly>
-          </div>
-        </div>
-      </div>
+    <NavBar />
 
-      <DisclosurePanel class="sm:hidden">
-        <div class="space-y-1 pt-2 pb-3">
-          <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href" :class="[item.current ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800', 'block pl-3 pr-4 py-2 border-l-4 text-base font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</DisclosureButton>
-        </div>
-        <div class="border-t border-gray-200 pt-4 pb-3">
-          <div class="flex items-center px-4">
-            <div class="flex-shrink-0">
-              <img class="h-10 w-10 rounded-full" :src="user.imageUrl" alt="" />
-            </div>
-            <div class="ml-3">
-              <div class="text-base font-medium text-gray-800">{{ user.name }}</div>
-              <div class="text-sm font-medium text-gray-500">{{ user.email }}</div>
-            </div>
-            <button type="button" class="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-              <span class="sr-only">View notifications</span>
-              <BellIcon class="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-          <div class="mt-3 space-y-1">
-            <DisclosureButton v-for="item in userNavigation" :key="item.name" as="a" :href="item.href" class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">{{ item.name }}</DisclosureButton>
-          </div>
-        </div>
-      </DisclosurePanel>
-    </Disclosure>
-
-    <div class="py-10">
+    <div class="py-10" v-if="isLoaded">
       <header>
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900">Your Documents</h1>
@@ -64,33 +13,32 @@
           <div class="px-4 py-8 sm:px-0">
             <div class="">
               <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                <li v-for="doc in docs" :key="doc.email" class="col-span-1 divide-y divide-gray-200 rounded-2xl bg-gray-200">
+                <li v-for="doc in docs.forms" :key="doc.id" class="col-span-1 divide-y divide-gray-200 rounded-2xl bg-gray-200">
                   <div class="flex w-full items-center justify-between space-x-6 p-6">
                     <div class="flex-1 truncate">
                       <div class="flex items-center space-x-3">
                         <h3 class="truncate text-sm font-medium text-gray-900">{{ doc.name }}</h3>
-                        <span class="inline-block flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">{{ doc.role }}</span>
+                        <span class="inline-block flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">Form</span>
                       </div>
-                      <p class="mt-1 truncate text-sm text-gray-500">{{ doc.title }}</p>
+                      <p class="mt-1 truncate text-sm text-gray-500">{{ doc.desc }}</p>
                     </div>
-                    <img class="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" :src="doc.imageUrl" alt="" />
                   </div>
                   <div>
                     <div class="-mt-px flex divide-x divide-gray-200">
                       <div class="flex w-0 flex-1">
-                        <a :href="`mailto:${doc.email}`" class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
+                        <a :href="`/forms/edit/${doc.id}`" class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
                           <PencilSquareIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
                           <span class="ml-3">Edit</span>
                         </a>
                       </div>
                       <div class="-ml-px flex w-0 flex-1">
-                        <a :href="`tel:${doc.telephone}`" class="relative inline-flex w-0 flex-1 items-center justify-center rounded-br-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
+                        <a :href="`/forms/responses/${doc.id}`" class="relative inline-flex w-0 flex-1 items-center justify-center rounded-br-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
                           <ChatBubbleLeftEllipsisIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
                           <span class="ml-3">Responses</span>
                         </a>
                       </div>
                       <div class="-ml-px flex w-0 flex-1">
-                        <a :href="`tel:${doc.telephone}`" class="relative inline-flex w-0 flex-1 items-center justify-center rounded-br-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
+                        <a :href="`/forms/settings/${doc.id}`" class="relative inline-flex w-0 flex-1 items-center justify-center rounded-br-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
                           <Cog6ToothIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
                           <span class="ml-3">Settings</span>
                         </a>
@@ -129,6 +77,13 @@
           </div>
         </div>
       </main>
+    </div>
+    <div class="py-10" v-else>
+      <header>
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900">Loading...</h1>
+        </div>
+      </header>
     </div>
   </div>
   <TransitionRoot appear :show="isOpen" as="template">
@@ -208,25 +163,22 @@ import { ref } from 'vue'
 import {
   Disclosure,
   DisclosurePanel,
+  DisclosureButton,
   TransitionRoot,
   TransitionChild,
   Dialog,
   DialogPanel,
   DialogTitle,
 } from '@headlessui/vue'
+import { nextTick } from 'process';
 
 const { publicKey } = useWallet()
 const { wallet, program } = useAnchor()
 
 const toast = useToast();
-watch(wallet, () => {
-    if(!wallet.value?.publicKey) {
-      toast('Successfully disconnected wallet!');
-      navigateTo('/')
-    }
-})
 
 const isOpen = ref(false)
+var isLoaded = ref(false)
 
 function closeModal() {
   isOpen.value = false
@@ -248,10 +200,32 @@ async function newForm() {
   axios.post('http://localhost/api/forms/create', data)
     .then(res => {
       toast('Successfully created form!');
-      navigateTo(`/forms/edit/?id=${res.data}`)
+      navigateTo(`/forms/edit/${res.data}`)
     })
     .catch(err => {
       toast.error('Error creating form!');
     })
 }
+
+var fetch = setInterval(async () => {
+  const data = {
+    address: await wallet.value?.publicKey.toString(),
+  }
+  axios.post('http://localhost/api/documents/get', data)
+    .then(res => {
+      docs.value = res.data
+      isLoaded.value = true
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}, 1000)
+
+const docs = ref([])
+
+onUpdated(async () => {
+  clearInterval(fetch)
+})
+
+// const docs
 </script>

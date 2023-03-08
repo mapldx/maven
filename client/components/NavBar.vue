@@ -6,6 +6,9 @@
           <div class="flex flex-shrink-0 items-center">
             <img class="block h-8 w-auto lg:hidden" src="/logo/default.png" alt="Your Company" />
             <img class="hidden h-8 w-auto lg:block" src="/logo/default.png" alt="Your Company" />
+            <div class="flex ml-8">
+              <a href="/app">← Return to dashboard</a>
+            </div>
           </div>
         </div>
         <div class="hidden sm:ml-6 sm:flex sm:items-center">
