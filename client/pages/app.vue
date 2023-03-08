@@ -248,7 +248,7 @@ async function newForm() {
   axios.post('http://localhost/api/forms/create', data)
     .then(res => {
       toast('Successfully created form!');
-      navigateTo(`/forms/${res.data}`)
+      navigateTo(`/forms/edit/?id=${res.data}`)
     })
     .catch(err => {
       toast.error('Error creating form!');

@@ -83,6 +83,13 @@ app.post('/api/forms/create', async (req, res) => {
   return formId
 })
 
+app.get('/api/forms/:id', async (req, res) => {
+  const formId = req.params.id
+  const form = db.collection('forms').doc(formId)
+  const doc = await form.get()
+  res.send(doc.data())
+})
+
 app.get('/api/forms/:target', async (req, res) => {
   var formList = []
   const target = req.params.target
