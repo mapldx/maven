@@ -90,6 +90,20 @@ app.post('/api/forms/create', async (req, res) => {
   return formId
 })
 
+app.post('/api/forms/delete', async (req, res) => {
+  const address = req.body.address
+  const documents = db.collection('documents').doc(address)
+  const data = {
+    id: req.body.id,
+    name: req.body.name,
+    desc: req.body.desc,
+  }
+  await documents.update({
+    forms: FieldValue.arrayRemove(data)
+  })
+  res.send(data)
+});
+
 app.post('/api/forms/publish', async (req, res) => {
   console.log(req.body)
   const formId = req.body.formId

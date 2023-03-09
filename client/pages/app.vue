@@ -26,9 +26,9 @@
                   <div>
                     <div class="-mt-px flex divide-x divide-gray-200">
                       <div class="flex w-0 flex-1">
-                        <a :href="`/forms/edit/${doc.id}`" class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
-                          <PencilSquareIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-                          <span class="ml-3">Edit</span>
+                        <a :href="`#`" class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
+                          <EyeIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+                          <span class="ml-3">Preview</span>
                         </a>
                       </div>
                       <div class="-ml-px flex w-0 flex-1">
@@ -37,10 +37,10 @@
                           <span class="ml-3">Responses</span>
                         </a>
                       </div>
-                      <div class="-ml-px flex w-0 flex-1">
-                        <a :href="`/forms/settings/${doc.id}`" class="relative inline-flex w-0 flex-1 items-center justify-center rounded-br-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
-                          <Cog6ToothIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-                          <span class="ml-3">Settings</span>
+                      <div class="-ml-px flex w-0 flex-1" @click="deleteDoc(doc.id, doc.name, doc.desc)">
+                        <a class="relative inline-flex w-0 flex-1 items-center justify-center rounded-br-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
+                          <TrashIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+                          <span class="ml-3">Delete</span>
                         </a>
                       </div>
                     </div>
@@ -152,7 +152,7 @@
 </template>
 
 <script setup>
-import { ChatBubbleLeftEllipsisIcon, DocumentMagnifyingGlassIcon, DevicePhoneMobileIcon, PencilSquareIcon, Cog6ToothIcon } from '@heroicons/vue/20/solid'
+import { ChatBubbleLeftEllipsisIcon, DocumentMagnifyingGlassIcon, DevicePhoneMobileIcon, EyeIcon, TrashIcon } from '@heroicons/vue/20/solid'
 
 import { WalletMultiButton, useWallet } from 'solana-wallets-vue'
 import { useToast } from "vue-toastification";
@@ -204,6 +204,31 @@ async function newForm() {
     .catch(err => {
       toast.error('Error creating form!');
     })
+}
+
+async function deleteDoc(id, name, desc) {
+  const data = {
+    address: wallet.value?.publicKey,
+    id: id,
+    name: name,
+    desc: desc,
+  }
+  const res = await axios.post('http://localhost/api/forms/delete', data)
+  if (res.status == 200) {
+    toast('Successfully deleted form!');
+    const data = {
+      address: await wallet.value?.publicKey.toString(),
+    }
+    axios.post('http://localhost/api/documents/get', data)
+      .then(res => {
+        docs.value = res.data
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  } else {
+    toast.error('Error deleting form!');
+  }
 }
 
 let fetch;
