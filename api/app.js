@@ -78,14 +78,30 @@ app.post('/api/forms/create', async (req, res) => {
     desc: desc,
     owner: address,
     created: Timestamp.now(),
-    fields: [],
+    updated: null,
+    fields: null,
     responses: [],
-    target: 'lily',
+    target_primary: null,
+    target_secondary: null,
     published: false,
   })
 
   res.send(formId)
   return formId
+})
+
+app.post('/api/forms/publish', async (req, res) => {
+  console.log(req.body)
+  const formId = req.body.formId
+  const form = db.collection('forms').doc(formId)
+  await form.update({
+    updated: Timestamp.now(),
+    fields: JSON.stringify(req.body.fields),
+    target_primary: req.body.target_primary,
+    target_secondary: req.body.target_secondary,
+    published: true,
+  })
+  res.send('Published form ' + formId)
 })
 
 app.get('/api/forms/:id', async (req, res) => {
