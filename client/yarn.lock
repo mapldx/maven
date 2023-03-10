@@ -4984,6 +4984,11 @@ ignore@^5.2.0, ignore@^5.2.4:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.4.tgz#a291c0c6178ff1b960befe47fcdec301674a6324"
   integrity sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==
 
+imgbb-uploader@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/imgbb-uploader/-/imgbb-uploader-1.5.0.tgz#9b2245bb68845c45f6b6f83635a637aa055f39c9"
+  integrity sha512-60cEP5Mw48ZM0evf/mo1j/sHPzgaM83z9cdjDRf6DNrpbWk/dw+2UIe2MRtC1HqQ6i9GyJfGOzNbspriWVGTeA==
+
 inflight@^1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"

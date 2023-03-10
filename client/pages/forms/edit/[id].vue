@@ -273,10 +273,13 @@ import {
   DialogTitle,
 } from '@headlessui/vue'
 import { useToast } from "vue-toastification";
+import { imgbbUploader } from 'imgbb-uploader'
 
 const route = useRoute()
 const formData = ref({})
 const isLoaded = ref(false)
+
+const runtimeConfig = useRuntimeConfig()
 
 onBeforeMount(async () => {
   console.log(route.params.id)
@@ -461,7 +464,7 @@ async function addElement(element) {
   formElements.value.push(field)
 }
 
-function openFilePicker() {
+async function openFilePicker() {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/*';
@@ -469,17 +472,40 @@ function openFilePicker() {
     const file = input.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = () => {
+    const res = ref(null)
+    reader.onload = async () => {
       const img = new Image();
       img.src = reader.result;
-      img.onload = () => {
+      img.onload = async () => {
         if (img.width > img.height) {
-          addElement({
-            name: 'header',
-            label: 'Header Photo',
-            type: 'header',
-            src: reader.result,
-          });
+          const base64String = reader.result.split(',')[1];
+          console.log(base64String);
+          const apiEndpoint = 'https://api.imgbb.com/1/upload';
+          const clientApiKey = runtimeConfig.public.IMGBB_API;
+
+          const formData = new FormData();
+          formData.append('image', base64String);
+          const config = {
+            headers: {
+              'content-type': 'multipart/form-data'
+            },
+            params: {
+              key: clientApiKey
+            }
+          };
+          axios.post(apiEndpoint, formData, config)
+            .then(response => {
+              res.value = response.data.data.url;
+              addElement({
+                name: 'header',
+                label: 'Header Photo',
+                type: 'header',
+                src: res.value,
+              });
+            })
+            .catch(error => {
+              console.log(error);
+            });
         } else {
           alert('The uploaded image must be in landscape orientation.');
         }
