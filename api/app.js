@@ -81,6 +81,7 @@ app.post('/api/forms/create', async (req, res) => {
     updated: null,
     fields: null,
     responses: [],
+    target: null,
     target_primary: null,
     target_secondary: null,
     published: false,
@@ -108,14 +109,15 @@ app.post('/api/forms/publish', async (req, res) => {
   console.log(req.body)
   const formId = req.body.formId
   const form = db.collection('forms').doc(formId)
+  const target_identifier = req.body.target_identifier
   await form.update({
     updated: Timestamp.now(),
     fields: JSON.stringify(req.body.fields),
+    target: target_identifier,
     target_primary: req.body.target_primary,
     target_secondary: req.body.target_secondary,
     published: true,
   })
-  const target_identifier = req.body.target_identifier
   const target = db.collection('targets').doc(target_identifier)
   const doc = await target.get()
   if (doc.exists) {
@@ -136,7 +138,7 @@ app.post('/api/forms/publish', async (req, res) => {
   }
 })
 
-app.get('/api/forms/:id', async (req, res) => {
+app.get('/api/forms/get/:id', async (req, res) => {
   const formId = req.params.id
   const form = db.collection('forms').doc(formId)
   const doc = await form.get()
@@ -161,6 +163,23 @@ app.post('/api/documents/get', async (req, res) => {
     const doc = await documents.get()
     res.send(doc.data())
   }
+})
+
+app.post('/api/documents/match', async (req, res) => {
+  var data = req.body.data
+  var match = []
+  const targets = db.collection('targets')
+  const doc = await targets.get()
+  console.log(data)
+  doc.forEach(target => {
+    var target_data = target.id
+    for (var i = 0; i < data.length; i++) {
+      if (target_data.includes(data[i])) {
+        match.push(target_data)
+      }
+    }
+  });
+  res.send(match)
 })
 
 app.listen(port, () => {

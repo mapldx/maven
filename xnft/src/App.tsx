@@ -3,7 +3,8 @@ import { RecoilRoot } from "recoil";
 import { ActivityIndicator, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useFonts, Inter_900Black } from "@expo-google-fonts/dev";
 
 import { ExamplesScreens } from "./screens/ExamplesScreen";
@@ -17,16 +18,16 @@ function TabNavigator() {
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarActiveTintColor: "#e91e63",
+        tabBarActiveTintColor: "#3366CC",
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="View open forms"
         component={HomeScreen}
         options={{
-          tabBarLabel: "Home",
+          tabBarLabel: "Forms",
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" color={color} size={size} />
+            <AntDesign name="form" color={color} size={size} />
           ),
         }}
       />
@@ -35,19 +36,9 @@ function TabNavigator() {
         component={TokenListNavigator}
         options={{
           headerShown: false,
-          tabBarLabel: "Tokens",
+          tabBarLabel: "Sites",
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="bank" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Examples"
-        component={ExamplesScreens}
-        options={{
-          tabBarLabel: "Examples",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+            <MaterialIcons name="perm-device-information" color={color} size={size} />
           ),
         }}
       />
@@ -56,18 +47,6 @@ function TabNavigator() {
 }
 
 function App() {
-  let [fontsLoaded] = useFonts({
-    Inter_900Black,
-  });
-
-  if (!fontsLoaded) {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator />
-      </View>
-    );
-  }
-
   return (
     <RecoilRoot>
       <NavigationContainer>

@@ -42,7 +42,7 @@ export const HomeScreen = () => {
       })
       return (
         <View>
-          <Iframe src={`http://localhost:3000/${userId}`} style={{ height: '80vh' }} />
+          <Iframe src={`http://localhost:3000/xnft/forms/${userId}`} style={{ height: '80vh' }} />
         </View>
       );
     }

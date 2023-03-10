@@ -280,7 +280,7 @@ const isLoaded = ref(false)
 
 onBeforeMount(async () => {
   console.log(route.params.id)
-  const response = await axios.get('http://localhost/api/forms/' + route.params.id)
+  const response = await axios.get('http://localhost/api/forms/get/' + route.params.id)
   formData.value = response.data
   isLoaded.value = true
   console.log(formData.value)
