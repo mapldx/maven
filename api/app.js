@@ -115,7 +115,25 @@ app.post('/api/forms/publish', async (req, res) => {
     target_secondary: req.body.target_secondary,
     published: true,
   })
-  res.send('Published form ' + formId)
+  const target_identifier = req.body.target_identifier
+  const target = db.collection('targets').doc(target_identifier)
+  const doc = await target.get()
+  if (doc.exists) {
+    const data = doc.data()
+    var count = data["count"].toString()
+    var count = parseInt(count) + 1
+    await target.update({
+      count: count,
+      most_recent: Timestamp.now(),
+    })
+    res.send('Updated target ' + target_identifier + ' to ' + count)
+  } else {
+    await target.set({
+      count: 1,
+      first_created: Timestamp.now(),
+    })
+    res.send('Created target ' + target_identifier)
+  }
 })
 
 app.get('/api/forms/:id', async (req, res) => {

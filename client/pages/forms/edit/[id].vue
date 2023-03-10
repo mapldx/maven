@@ -401,6 +401,7 @@ async function createForm() {
   const response = await axios.post('http://localhost/api/forms/publish', {
     formId: route.params.id,
     fields: formElements.value,
+    target_identifier: targetEl.value,
     target_primary: resolvedTarget.verifiedCollectionAddress || null,
     target_secondary: resolvedTarget.firstVerifiedCreator,
   })
