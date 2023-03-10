@@ -1,31 +1,50 @@
-import { Text, FlatList } from "react-native";
-import tw from "twrnc";
+import React, { useState } from "react";
+import { Text, View } from "react-native";
+import { useDidLaunch } from "../hooks/xnft-hooks";
 
-import { Screen } from "../components/Screen";
+import { Iframe } from "react-xnft"
 
-export function HomeScreen() {
-  const features = [
-    "tailwind",
-    "recoil",
-    "native styling",
-    "fetching code from an API",
-    "using a FlatList to render data",
-    "Image for both remote & local images",
-    "custom fonts",
-    "sign a transaction / message",
-    "theme hook with light/dark support",
-  ];
+import tw from 'twrnc';
+import axios from 'axios';
 
-  return (
-    <Screen>
-      <Text style={tw`mb-4`}>
-        You'll find several examples of how to build xNFTs using react-native:
-      </Text>
-      <FlatList
-        data={features}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => <Text>- {item}</Text>}
-      />
-    </Screen>
-  );
-}
+export const HomeScreen = () => {
+  const [loading, setLoading] = useState(true);
+  setTimeout(() => {
+    setLoading(false)
+  }, 2000);
+
+  const didLaunch = useDidLaunch();
+  const [user] = useState(null);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        Loading...
+      </View>
+    );
+  }
+
+  console.log("didLaunch", didLaunch);
+  if (didLaunch === true) {
+    if (window.xnft["metadata"] === undefined) {
+      return (
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <Text style={tw`text-lg font-bold text-red-500`}>Error retrieving data</Text>
+          <Text style={tw`text-sm font-semibold`}>Kindly quit and relaunch the xNFT</Text>
+        </View>
+      );
+    } else {
+      const userId = window.xnft["metadata"].userId
+      axios.get(`https://xnft-api-server.xnfts.dev/v1/users?user_id=${userId}`)
+      .then(res => {
+        const persons = res.data;
+        console.log(persons);
+      })
+      return (
+        <View>
+          <Iframe src={`http://localhost:3000/${userId}`} style={{ height: '80vh' }} />
+        </View>
+      );
+    }
+  }
+};
