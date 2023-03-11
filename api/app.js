@@ -80,7 +80,7 @@ app.post('/api/forms/create', async (req, res) => {
     created: Timestamp.now(),
     updated: null,
     fields: null,
-    responses: [],
+    responses: "[]",
     target: null,
     target_primary: null,
     target_secondary: null,

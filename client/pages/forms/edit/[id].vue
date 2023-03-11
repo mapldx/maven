@@ -169,10 +169,6 @@
                           </div>
                           <button type="button" class="bg-green-500 text-white text-sm mt-2" @click="addOption(configId)">Add Option</button> 
                         </div>
-                        <div class="flex items-center mt-2">
-                          <input type="checkbox" class="mr-2" v-model="inputRequired" />
-                          <label class="block">Mark as required?</label>
-                        </div>
                         <div class="mt-4">
                           <button
                             type="button"
@@ -229,7 +225,7 @@
                       Confirm details - {{ formData.name }}, {{ formElements.length - 1 }} fields
                     </DialogTitle>
                     <div class="mt-2">
-                      <h1 class="mb-2"><span class="font-bold">{{ targetEl }}</span><br><span class="text-sm">holders are granted access to your form if a match for the following are found in their wallet:</span></h1>
+                      <h1 class="mb-2"><span class="font-bold">{{ targetEl }}</span><br><span class="text-sm">holders are granted access to your form if a match for any of the following are found in their wallet:</span></h1>
                       <ul>
                         <li class="mb-2"><span class="bg-yellow-300">First verified creator:</span> {{ resolvedTarget.firstVerifiedCreator }}</li>
                         <li class="mb-2"><span class="bg-yellow-300">On-chain collection:</span> {{ resolvedTarget.verifiedCollectionAddress }}</li>
@@ -237,8 +233,8 @@
                       <div class="text-sm mt-4">
                         <h1>Verify this by:</h1>
                         <ul>
-                          <li class="mb-3">1. Navigating to your floor NFT on Magic Eden: <a :href='`https://magiceden.io/item-details/${resolvedTarget.mint}`' class="text-blue-500 underline">{{ resolvedTarget.name }}</a></li>
-                          <li>2. Ensuring that the metadata match, specifically "On-chain Collection". Example:</li>
+                          <li class="mt-2 mb-2">1. Navigating to your floor NFT on Magic Eden: <a :href='`https://magiceden.io/item-details/${resolvedTarget.mint}`' class="text-blue-500 underline">{{ resolvedTarget.name }}</a></li>
+                          <li>2. Ensuring that the metadata match. Example:</li>
                           <img class="mt-3 mb-4" src="https://i.imgur.com/HD3shDj.png">
                           <li>3. Ensuring that the floor NFT is a part of a verified Magic Eden collection (small checkmark on the top-right of your collection name). Example:</li>
                           <img class="mt-3 mb-4" src="https://i.imgur.com/W8bP1In.png">
@@ -253,7 +249,6 @@
           </Dialog>
         </TransitionRoot>
       </section>
-      {{ formElements }}
     </div>
   </div>
 </template>
@@ -361,9 +356,9 @@ function addOption(id) {
   formElements.value[id] = selectField;
 }
 
-function removeOption(id) {
+function removeOption(id, optionId) {
   const selectField = JSON.parse(JSON.stringify(formElements.value[id]));
-  selectField.options.splice(id, 1);
+  selectField.options.splice(optionId, 1);
   formElements.value[id] = selectField;
 }
 
@@ -409,7 +404,9 @@ async function createForm() {
     target_secondary: resolvedTarget.firstVerifiedCreator,
   })
   toast.success('Form published!')
-  console.log(response)
+  setTimeout(() => {
+    navigateTo('/app')
+  }, 2000)
 }
 
 const elements = [
