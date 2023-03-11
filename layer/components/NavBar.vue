@@ -79,6 +79,7 @@ const toast = useToast();
 watch(wallet, () => {
     if(!wallet.value?.publicKey) {
       toast('Successfully disconnected wallet!');
+      navigateTo('/')
     }
 })
 

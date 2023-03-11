@@ -11,7 +11,7 @@
             <div class="w-full">
               <ul role="list" class="bg-white divide-y divide-gray-200 w-full max-h-[65vh] overflow-y-auto ">
                 <li v-for="(form, index) in forms" :key="index">
-                  <a :href="`http://localhost:3000/xnft/forms/u/view/${ids[index++]}?user=${user}`"
+                  <a :href="`http://localhost:3000/connect/forms/u/view/${ids[index++]}?user=${user}`"
                     class="block hover:bg-gray-200">
                     <div class="mx-8 p-2">
                       <div class="flex items-center justify-between">
