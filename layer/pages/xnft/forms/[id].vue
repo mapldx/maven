@@ -91,7 +91,7 @@ function formIndex(community) {
       community = valid.value[i][1]
     }
   }
-  navigateTo(`/xnft/forms/src/${community}`)
+  navigateTo(`/xnft/forms/u/${community}?user=${route.params.id}`)
 }
 
 onMounted(async () => {
@@ -101,10 +101,4 @@ onMounted(async () => {
   console.log(communities.value)
 })
 
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-]
 </script>

@@ -156,6 +156,19 @@ app.get('/api/forms/:target', async (req, res) => {
   res.send(formList)
 })
 
+app.post('/api/forms/layer/submit', async (req, res) => {
+  const form = db.collection('forms').doc(req.body.id)
+  const doc = await form.get()
+  var response = doc.data()["responses"]
+  console.log(response)
+  response = JSON.parse(response)
+  response.push(req.body.response)
+  await form.update({
+    responses: JSON.stringify(response)
+  })
+  res.send('Submitted response to form ' + req.body.id)
+})
+
 app.post('/api/documents/get', async (req, res) => {
   const address = req.body.address
   if (address != undefined) {
