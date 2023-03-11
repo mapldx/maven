@@ -17,21 +17,23 @@
         </div>
       </div>
     </main>
-    <main v-else class="mx-auto w-full max-w-7xl px-6 pt-20 pb-16">
-      <img class="mx-auto h-12 w-auto" src="/logo/cover.png" alt="Your Company" />
-      <div class="mx-auto mt-20 max-w-2xl text-center sm:mt-24">
-        <p class="mt-4 text-base leading-7 text-gray-600 sm:mt-6 sm:text-lg sm:leading-8">View your forms and sites</p>
-        <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900">Your communities on Maven</h1>
-      </div>
-      <div class="mx-auto mt-8 flow-root max-w-lg">
-        <div class="flex items-center justify-center">
-          <div class="w-full">
-            <img :src="user_image" class="rounded-full mx-auto block w-24 h-auto mb-6" alt="User profile picture">
-            <div class="flex justify-center space-x-2">
-              <select class="px-2 py-1 rounded-md border-gray-400 border" v-model="selectedLink">
-                <option v-for="link in valid" :key="link[1]" :value="link[2]">{{ link[2] }}</option>
-              </select>
-              <button class="px-2 py-1 bg-blue-500 text-white rounded-md" @click="formIndex(selectedLink)">Go</button>
+    <main v-else>
+      <NavBar />
+      <div class="mx-auto w-full max-w-7xl px-6 pt-20 pb-16">
+        <div class="mx-auto mt-18 max-w-2xl text-center">
+          <p class="mt-4 text-base leading-7 text-gray-600 sm:mt-6 sm:text-lg sm:leading-8">View your forms and sites</p>
+          <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900">Your communities on Maven</h1>
+        </div>
+        <div class="mx-auto mt-8 flow-root max-w-lg">
+          <div class="flex items-center justify-center">
+            <div class="w-full">
+              <img :src="user_image" class="rounded-full mx-auto block w-24 h-auto mb-6" alt="User profile picture">
+              <div class="flex justify-center space-x-2">
+                <select class="px-2 py-1 rounded-md border-gray-400 border" v-model="selectedLink">
+                  <option v-for="link in valid" :key="link[1]" :value="link[2]">{{ link[2] }}</option>
+                </select>
+                <button class="px-2 py-1 bg-blue-500 text-white rounded-md" @click="formIndex(selectedLink)">Go</button>
+              </div>
             </div>
           </div>
         </div>

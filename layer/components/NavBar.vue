@@ -6,9 +6,6 @@
           <div class="flex flex-shrink-0 items-center">
             <img class="block h-8 w-auto lg:hidden" src="/logo/default.png" alt="Your Company" />
             <img class="hidden h-8 w-auto lg:block" src="/logo/default.png" alt="Your Company" />
-            <div class="flex ml-8" v-if="route.name != 'app'">
-              <a href="/app">← Return to dashboard</a>
-            </div>
           </div>
         </div>
         <div class="hidden sm:ml-6 sm:flex sm:items-center">
@@ -77,12 +74,11 @@ const { publicKey } = useWallet()
 const { wallet, program } = useAnchor()
 
 const route = useRoute()
-
 const toast = useToast();
+
 watch(wallet, () => {
     if(!wallet.value?.publicKey) {
       toast('Successfully disconnected wallet!');
-      navigateTo('/')
     }
 })
 
