@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex justify-center items-center">
     <div class="max-h-[80%] w-auto items-center text-center">
-      <nav class="space-y-1" aria-label="Sidebar">
+      <nav v-if="!isLoading" class="space-y-1" aria-label="Sidebar">
         <div class="fixed top-0 left-0 w-full">
           <div class="mt-10">
             <img :src="user.image" class="rounded-full mx-auto block w-24 h-auto mb-6" alt="User profile picture">
@@ -25,6 +25,16 @@
           </div>
         </div>
       </nav>
+      <nav v-else class="space-y-1" aria-label="Sidebar">
+        <div class="fixed top-0 left-0 w-full">
+          <div class="mt-10">
+            <p class="text-xl font-semibold">Loading...</p>
+            <div class="flex justify-center h-screen mt-3">
+              <div class="border-t-4 border-b-4 border-blue-500 w-12 h-12 rounded-full animate-spin"></div>
+            </div>
+          </div>
+        </div>
+      </nav>
     </div>
   </div>
 </template>
@@ -42,6 +52,7 @@ var communities = ref([])
 var match = ref([])
 var valid = ref([])
 var selectedLink = ref('')
+var isLoading = ref(true)
 
 async function fetchUser() {
   const { data } = await axios.get(`https://xnft-api-server.xnfts.dev/v1/users?user_id=${route.params.id}`)
@@ -98,7 +109,7 @@ onMounted(async () => {
   console.log(route.params.id)
   await fetchUser()
   await fetchCommunities()
-  console.log(communities.value)
+  isLoading.value = false
 })
 
 </script>

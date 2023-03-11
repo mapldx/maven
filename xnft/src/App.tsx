@@ -22,7 +22,7 @@ function TabNavigator() {
       }}
     >
       <Tab.Screen
-        name="View open forms"
+        name="Your forms"
         component={HomeScreen}
         options={{
           tabBarLabel: "Forms",

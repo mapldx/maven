@@ -19,7 +19,7 @@ export const HomeScreen = () => {
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        Loading...
+        <Text style={tw`text-lg font-bold text-blue-500`}>Launching Maven...</Text>
       </View>
     );
   }
