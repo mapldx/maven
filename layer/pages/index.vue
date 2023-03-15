@@ -42,9 +42,9 @@
     <div>
       <div class="fixed bottom-0 left-0 w-full">
         <div class="bg-gray-200 text-center py-4">
-          <p class="text-md font-semibold">Create your own Web 3 forms and sites at <a href="#"
-              class="text-blue-500 underline">usemaven.io</a></p>
-          <p class="text-xs mt-2">For best experience, use Maven as an xNFT on Backpack, on Phantom for iOS/Android, and Solflare for Saga.</p>
+          <p class="text-md font-semibold">Create your own Web 3 forms and sites at <a href="https://twitter.com/usemaven_"
+              class="text-blue-500 underline">@usemaven_</a></p>
+          <!-- <p class="text-xs mt-2">For best experience, use Maven as an xNFT on Backpack, on Phantom for iOS/Android, and Solflare for Saga.</p> -->
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@ var match = ref([])
 async function retrieveUser() {
   if (wallet.value?.publicKey) {
     const address = wallet.value?.publicKey.toString()
-    const { data } = await axios.get(`https://api-mainnet.magiceden.dev/v2/wallets/${address}/tokens?offset=0&limit=100&listStatus=both`)
+    const { data } = await axios.get(`https://cors.mini-schnauzer.workers.dev/?url=https://api-mainnet.magiceden.dev/v2/wallets/${address}/tokens?offset=0&limit=100&listStatus=both`)
     const image = await data.find(item => item.image !== null && item.image !== undefined).image;
     user_image.value = image
   }
@@ -98,7 +98,7 @@ async function retrieveUser() {
 
 async function fetchCommunities() {
   const address = wallet.value?.publicKey.toString()
-  const { data } = await axios.get(`https://api-mainnet.magiceden.dev/v2/wallets/${address}/tokens?offset=0&limit=100&listStatus=both`)
+  const { data } = await axios.get(`https://cors.mini-schnauzer.workers.dev/?url=https://api-mainnet.magiceden.dev/v2/wallets/${address}/tokens?offset=0&limit=100&listStatus=both`)
   for (let i = 0; i < data.length; i++) {
     var mintAddress = data[i].mintAddress
     var collection = data[i].collection

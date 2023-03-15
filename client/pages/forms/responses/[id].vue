@@ -8,7 +8,6 @@
           <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900">{{ formData.name }}</h1>
           <div class="mt-8">
             <h3 class="text-base font-semibold leading-6 text-gray-900">Overview</h3>
-            <p class="mt-2 text-sm text-gray-700">A list of all the users in your account including their name, title, email and role.</p>
             <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
               <div v-for="item in stats" :key="item.name" class="overflow-hidden rounded-lg bg-gray-200 px-4 py-5 shadow-lg sm:p-6">
                 <dt class="truncate text-sm font-medium text-gray-500">{{ item.name }}</dt>
@@ -20,10 +19,9 @@
             <div class="sm:flex sm:items-center">
               <div class="sm:flex-auto">
                 <h1 class="text-base font-semibold leading-6 text-gray-900">Responses</h1>
-                <p class="mt-2 text-sm text-gray-700">A list of all the users in your account including their name, title, email and role.</p>
               </div>
               <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                <button type="button" class="block rounded-md bg-indigo-600 py-2 px-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Export as CSV</button>
+                <button type="button" @click="downloadCSV" class="block rounded-md bg-indigo-600 py-2 px-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Export as CSV</button>
               </div>
             </div>
             <div class="mt-8 flow-root">
@@ -38,8 +36,8 @@
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
-                        <tr v-for="response in responses" :key="response">
-                          <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">Hi</td>
+                        <tr v-for="(response, index) in responses" :key="index">
+                          <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ index }}</td>
                           <td class="whitespace-normal px-3 py-4 text-sm text-gray-500" v-for="field in Object.keys(responses[0])" :key="field">{{ response[field] }}</td>
                         </tr>
                       </tbody>
@@ -112,5 +110,34 @@ onMounted(async () => {
   }
   isLoaded.value = true
 })
+
+async function downloadCSV() {
+  const jsonData = { data: responses.value };
+  const csvData = convertToCSV(jsonData);
+  const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', 'data.csv');
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function convertToCSV(jsonData) {
+  const items = jsonData.data;
+  const replacer = (key, value) => (value === null ? '' : value); 
+  const header = Object.keys(items[0]);
+  const csv = [
+    header.join(','), 
+    ...items.map((row) =>
+      header
+        .map((fieldName) => JSON.stringify(row[fieldName], replacer))
+        .join(',')
+    )
+  ].join('\r\n');
+  return csv;
+}
 
 </script>

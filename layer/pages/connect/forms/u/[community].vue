@@ -37,10 +37,10 @@
     <div>
       <div class="fixed bottom-0 left-0 w-full">
         <div class="bg-gray-200 text-center py-4">
-          <p class="text-md font-semibold">Create your own Web 3 forms and sites at <a href="#"
-              class="text-blue-500 underline">usemaven.io</a></p>
-          <p class="text-xs mt-2">For best experience, use Maven as an xNFT on Backpack, on Phantom for iOS/Android, and
-            Solflare for Saga.</p>
+          <p class="text-md font-semibold">Create your own Web 3 forms and sites at <a href="https://twitter.com/usemaven_"
+              class="text-blue-500 underline">@usemaven_</a></p>
+          <!-- <p class="text-xs mt-2">For best experience, use Maven as an xNFT on Backpack, on Phantom for iOS/Android, and
+            Solflare for Saga.</p> -->
         </div>
       </div>
     </div>

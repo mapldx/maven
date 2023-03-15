@@ -39,7 +39,7 @@
               <button @click.prevent="submitForm" class="p-2 bg-blue-500 mt-4 rounded-md text-md text-white font-semibold">Submit form</button>
               <p class="truncate text-xs mt-4 font-light">This form was created by {{ formElements.owner }}</p>
               <p class="text-xs font-light">Maven will not be held liable for the content on this form.</p>
-              <p class="text-xs font-light mt-2 underline text-blue-500"><a>Report this form</a></p>
+              <p class="text-xs font-light mt-2 mb-2 underline text-blue-500"><a :href="'https://twitter.com/intent/tweet?via=usemaven_&text=Report%3A%20' + form">Report this form</a></p>
             </form>
           </div>
         </div>
@@ -48,10 +48,9 @@
     <div>
       <div class="fixed bottom-0 left-0 w-full">
         <div class="bg-gray-200 text-center py-4">
-          <p class="text-md font-semibold">Create your own Web 3 forms and sites at <a href="#"
-              class="text-blue-500 underline">usemaven.io</a></p>
-          <p class="text-xs mt-2">For best experience, use Maven as an xNFT on Backpack, on Phantom for iOS/Android, and
-            Solflare for Saga.</p>
+          <p class="text-md font-semibold">Create your own Web 3 forms and sites at <a href="https://twitter.com/usemaven_"
+              class="text-blue-500 underline">@usemaven_</a></p>
+          <!-- <p class="text-xs mt-2">Coming soon as an xNFT on Backpack, on Phantom for iOS/Android, and Saga.</p> -->
         </div>
       </div>
     </div>

@@ -14,10 +14,6 @@
         <div class="mt-24 sm:mt-32 lg:mt-16">
           <a href="#" class="inline-flex space-x-6">
             <span class="rounded-full bg-red-500/10 px-4 py-1 text-sm font-semibold leading-6 text-red-600 ring-1 ring-inset ring-red-600/10">We're a Grizzlython entry!</span>
-            <span class="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-gray-600">
-              <span>Read more</span>
-              <ChevronRightIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-            </span>
           </a>
         </div>
         <h1 class="mt-10 text-4xl font-semibold tracking-tight text-gray-900 sm:text-6xl">Create your own microsites for Web 3,<br><span class="text-blue-500">the way you imagine</span></h1>
@@ -30,13 +26,12 @@
                     Loading
                 </template>
           </ClientOnly>
-          <a href="#" class="text-base font-semibold leading-7 text-gray-900">Learn more <span aria-hidden="true">→</span></a>
         </div>
       </div>
       <div class="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mt-0 lg:mr-0 lg:max-w-none lg:flex-none xl:ml-32">
         <div class="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
           <div class="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
-            <img src="#" alt="" width="2432" height="1442" class="w-[76rem] rounded-md shadow-2xl ring-1 ring-gray-900/10" />
+            <img src="/landing.png" alt="" width="2432" height="1442" class="w-[76rem] rounded-md shadow-2xl ring-1 ring-gray-900/10" />
           </div>
         </div>
       </div>

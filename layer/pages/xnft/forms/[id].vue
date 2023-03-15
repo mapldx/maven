@@ -61,7 +61,7 @@ async function fetchUser() {
 }
 
 async function fetchCommunities() {
-  const { data } = await axios.get(`https://api-mainnet.magiceden.dev/v2/wallets/${address.value}/tokens?offset=0&limit=100&listStatus=both`)
+  const { data } = await axios.get(`https://cors.mini-schnauzer.workers.dev/?url=https://api-mainnet.magiceden.dev/v2/wallets/${address.value}/tokens?offset=0&limit=100&listStatus=both`)
   for (let i = 0; i < data.length; i++) {
     var mintAddress = data[i].mintAddress
     var collection = data[i].collection

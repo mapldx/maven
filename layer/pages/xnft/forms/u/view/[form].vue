@@ -38,7 +38,6 @@
                   <button @click.prevent="submitForm" class="p-2 bg-blue-500 mt-4 rounded-md text-md text-white font-semibold">Submit form</button>
                   <p class="truncate text-xs mt-4 font-light">This form was created by {{ formElements.owner }}</p>
                   <p class="text-xs font-light">Maven will not be held liable for the content on this form.</p>
-                  <p class="text-xs font-light mt-2 underline text-blue-500"><a>Report this form</a></p>
                 </form>
               </div>
             </div>

@@ -7,9 +7,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useFonts, Inter_900Black } from "@expo-google-fonts/dev";
 
-import { ExamplesScreens } from "./screens/ExamplesScreen";
 import { HomeScreen } from "./screens/HomeScreen";
-import { TokenListNavigator } from "./screens/TokenNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -28,17 +26,6 @@ function TabNavigator() {
           tabBarLabel: "Forms",
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="form" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="List"
-        component={TokenListNavigator}
-        options={{
-          headerShown: false,
-          tabBarLabel: "Sites",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="perm-device-information" color={color} size={size} />
           ),
         }}
       />
