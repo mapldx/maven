@@ -86,20 +86,8 @@ async function renderForms() {
   encryption_key.value = formElements.value[0].encryption
 }
 
-const submitForm = async () => {
-  const address = route.query.user
-  const formData = formElements.value["fields"].reduce((acc, field) => {
-    return {
-      timestamp: Date.now(),
-      address: address,
-      method: "website",
-      ...acc,
-      [field.label]: field.value,
-    }
-  }, {})
+async function encrypt(response) {
   const publicKeyBuffer = new Uint8Array(atob(encryption_key.value).split('').map(char => char.charCodeAt(0)));
-  const response = JSON.stringify(formData)
-  // Import the public key using the Web Crypto API
   let publicKey;
   try {
     publicKey = await window.crypto.subtle.importKey(
@@ -115,23 +103,76 @@ const submitForm = async () => {
   } catch (error) {
     console.error("Failed to import public key:", error);
   }
+
+  // Generate a random symmetric encryption key
+  const symmetricKey = await window.crypto.subtle.generateKey(
+    {
+      name: "AES-GCM",
+      length: 256,
+    },
+    true,
+    ["encrypt", "decrypt"]
+  );
+
+  // Encrypt the plaintext with the symmetric key
   const encodedPlaintext = new TextEncoder().encode(response);
-  let ciphertext;
-  try {
-    ciphertext = await window.crypto.subtle.encrypt(
-      {
-        name: "RSA-OAEP",
-      },
-      publicKey,
-      encodedPlaintext
-    );
-  } catch (error) {
-    console.error("Failed to encrypt plaintext:", error);
-  }
-  const ciphertextBase64 = btoa(String.fromCharCode(...new Uint8Array(ciphertext)));
+  const iv = window.crypto.getRandomValues(new Uint8Array(12));
+  const ciphertext = await window.crypto.subtle.encrypt(
+    {
+      name: "AES-GCM",
+      iv: iv,
+    },
+    symmetricKey,
+    encodedPlaintext
+  );
+
+  // Export the symmetric key in JWK format
+  const jwkSymmetricKey = await window.crypto.subtle.exportKey(
+    "jwk",
+    symmetricKey
+  );
+
+  // Encrypt the JWK symmetric key with the public key
+  const encodedSymmetricKey = new TextEncoder().encode(
+    JSON.stringify(jwkSymmetricKey)
+  );
+  const encryptedSymmetricKey = await window.crypto.subtle.encrypt(
+    {
+      name: "RSA-OAEP",
+    },
+    publicKey,
+    encodedSymmetricKey
+  );
+
+  const ivBuffer = new Uint8Array(iv);
+  const message = new Uint8Array(
+    ivBuffer.byteLength + encryptedSymmetricKey.byteLength + ciphertext.byteLength
+  );
+  message.set(ivBuffer, 0);
+  message.set(new Uint8Array(encryptedSymmetricKey), ivBuffer.byteLength);
+  message.set(new Uint8Array(ciphertext), ivBuffer.byteLength + encryptedSymmetricKey.byteLength);
+
+  // Return the base64-encoded message buffer
+  return btoa(String.fromCharCode(...message));
+}
+
+const submitForm = async () => {
+  const address = route.query.user
+  var formData = formElements.value["fields"].reduce((acc, field) => {
+    return {
+      timestamp: Date.now(),
+      address: address,
+      method: "website",
+      ...acc,
+      [field.label]: field.value,
+    }
+  }, {})
+  formData = JSON.stringify(formData)
+  formData = await encrypt(formData)
+
   await axios.post('http://localhost/api/forms/layer/submit', {
     id: form.value,
-    response: ciphertextBase64
+    response: formData
   })
     .then(function (res) {
       console.log(res);

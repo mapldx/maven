@@ -49,9 +49,47 @@
           </div>
         </div>
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" v-else>
-          <h1>Currently editing</h1>
+          <h1>Viewing responses for</h1>
           <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900">Loading data...</h1>
         </div>
+        <section>
+          <TransitionRoot appear :show="isEncryptOpen" as="template">
+            <Dialog as="div" @close="closeEncryptModal" class="relative z-10">
+              <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
+                leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+                <div class="fixed inset-0 bg-black bg-opacity-25" />
+              </TransitionChild>
+
+              <div class="fixed inset-0 overflow-y-auto">
+                <div class="flex min-h-full items-center justify-center p-4 text-center">
+                  <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
+                    enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
+                    leave-to="opacity-0 scale-95">
+                    <DialogPanel
+                      class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                      <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+                        Create encryption keys for {{ formData.name }}
+                      </DialogTitle>
+                      <div class="text-sm mt-2 mb-2">This encrypts your form's responses so that only you can read them.</div>
+                      <div class="text-sm mt-2">
+                        <h1 class="mb-1">Read carefully:</h1>
+                        <ul>
+                          <li class="mb-1">1. By enabling encryption, Maven enters a zero-knowledge state. This means that
+                            Maven is unable to see form response data.</li>
+                          <li class="mb-1">2. You will need to save the encryption keys in a safe place. If you lose them,
+                            you will not be able to decrypt your form response data and Maven cannot recover it for you.
+                          </li>
+                        </ul>
+                      </div>
+                      <button :disabled="!agreeToTerms" class="mt-2 bg-blue-500 p-2 text-sm text-white rounded-md disabled:bg-gray-300"
+                        @click="createEncryption">Download key</button>
+                    </DialogPanel>
+                  </TransitionChild>
+                </div>
+              </div>
+            </Dialog>
+          </TransitionRoot>
+        </section>
       </header>
     </div>
   </main>
@@ -71,6 +109,11 @@ var responses = ref([])
 
 var num_responses = ref(0)
 var stats = ref([])
+
+var isEncryptOpen = ref(false)
+async function openEncryptModal() {
+  isEncryptOpen.value = true
+}
 
 onMounted(async () => {
   const { data } = await axios.get(`http://localhost/api/forms/get/${id}`)
