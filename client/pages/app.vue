@@ -43,7 +43,7 @@
                           </a>
                         </div>
                         <div class="-ml-px flex w-0 flex-1">
-                          <a :href="`/forms/responses/${doc.id}`"
+                          <a @click="copyToClipboard(doc.id)"
                             class="relative inline-flex w-0 flex-1 items-center justify-center rounded-br-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
                             <ShareIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
                             <span class="ml-3">Share</span>
@@ -363,6 +363,18 @@ async function deleteSite(id, name, desc) {
   } else {
     toast.error('Error deleting site!');
   }
+}
+
+function copyToClipboard(variable) {
+  variable = variable.substring(5, variable.length)
+  variable = 'localhost:53985/forms/view/' + variable
+  const el = document.createElement('textarea');
+  el.value = variable;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+  toast('Copied link to clipboard');
 }
 
 let fetch;

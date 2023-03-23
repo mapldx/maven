@@ -59,7 +59,7 @@ app.post('/api/forms/create', async (req, res) => {
   const documents = db.collection('documents').doc(address)
   const doc = await documents.get()
 
-  const formId = uniqid('form-', address)
+  const formId = uniqid('form-')
   var header = {
     id: formId,
     name: name,

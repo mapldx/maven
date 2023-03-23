@@ -37,7 +37,8 @@
                 </div>
               </div>
               <button @click.prevent="submitForm" class="p-2 bg-blue-500 mt-4 rounded-md text-md text-white font-semibold">Submit form</button>
-              <p class="truncate text-xs mt-4 font-light">This form was created by {{ formElements.owner }}</p>
+              <p class="truncate text-xs mt-4 font-light" v-if="encryption_key.length > 1">The creator of this form has opted for its responses to be encrypted.</p>
+              <p class="truncate text-xs mt-4 font-light">This form was created by {{ formElements.owner }}.</p>
               <p class="text-xs font-light">Maven will not be held liable for the content on this form.</p>
               <p class="text-xs font-light mt-2 mb-2 underline text-blue-500"><a :href="'https://twitter.com/intent/tweet?via=usemaven_&text=Report%3A%20' + form">Report this form</a></p>
             </form>
@@ -64,11 +65,12 @@ import { useToast } from 'vue-toastification';
 const route = useRoute()
 const toast = useToast()
 
-const form = ref(route.params.form)
+const form = ref("form-" + route.params.form)
 console.log(form.value)
 
 const formElements = ref([])
 const isLoaded = ref(false)
+var encryption_key = ref('')
 
 async function renderForms() {
   const response = await axios.get(`http://localhost/api/forms/get/${form.value}`)
@@ -78,8 +80,10 @@ async function renderForms() {
     owner: data.owner,
     name: data.name,
     fields: data.fields,
+    encryption: data.encryption
   })
   console.log(formElements.value)
+  encryption_key.value = formElements.value[0].encryption
 }
 
 const submitForm = async () => {
@@ -93,10 +97,41 @@ const submitForm = async () => {
       [field.label]: field.value,
     }
   }, {})
+  const publicKeyBuffer = new Uint8Array(atob(encryption_key.value).split('').map(char => char.charCodeAt(0)));
   const response = JSON.stringify(formData)
+  // Import the public key using the Web Crypto API
+  let publicKey;
+  try {
+    publicKey = await window.crypto.subtle.importKey(
+      "spki",
+      publicKeyBuffer,
+      {
+        name: "RSA-OAEP",
+        hash: { name: "SHA-256" },
+      },
+      true,
+      ["encrypt"]
+    );
+  } catch (error) {
+    console.error("Failed to import public key:", error);
+  }
+  const encodedPlaintext = new TextEncoder().encode(response);
+  let ciphertext;
+  try {
+    ciphertext = await window.crypto.subtle.encrypt(
+      {
+        name: "RSA-OAEP",
+      },
+      publicKey,
+      encodedPlaintext
+    );
+  } catch (error) {
+    console.error("Failed to encrypt plaintext:", error);
+  }
+  const ciphertextBase64 = btoa(String.fromCharCode(...new Uint8Array(ciphertext)));
   await axios.post('http://localhost/api/forms/layer/submit', {
     id: form.value,
-    response: response
+    response: ciphertextBase64
   })
     .then(function (res) {
       console.log(res);
