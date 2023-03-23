@@ -17,8 +17,8 @@
           </a>
         </div>
         <h1 class="mt-10 text-4xl font-semibold tracking-tight text-gray-900 sm:text-6xl">Create your own microsites for Web 3,<br><span class="text-blue-500">the way you imagine</span></h1>
-        <p class="mt-6 lg:text-lg leading-8 text-gray-600 ">Say hello to Web 3's easiest plug-and-play solution for <span class="font-bold underline">forms and one-page sites</span>
-          as executable NFTs (xNFTs) on Backpack. Create better exclusive experiences for your community of holders.</p>
+        <p class="mt-6 lg:text-lg leading-8 text-gray-600 ">Say hello to Web 3's easiest plug-and-play solution for <span class="font-bold underline">token-gated forms and one-page sites.</span>
+        Effortlessly create better value-add experiences for your community of holders in minutes.</p>
         <div class="mt-10 flex items-center gap-x-6">
           <ClientOnly>
                 <WalletMultiButton />

@@ -85,6 +85,7 @@ app.post('/api/forms/create', async (req, res) => {
     target_primary: null,
     target_secondary: null,
     published: false,
+    encryption: "false",
   })
 
   res.send(formId)
@@ -106,7 +107,7 @@ app.post('/api/forms/delete', async (req, res) => {
 });
 
 app.post('/api/forms/publish', async (req, res) => {
-  console.log(req.body)
+  console.log(req.body.encryption)
   const formId = req.body.formId
   const form = db.collection('forms').doc(formId)
   const target_identifier = req.body.target_identifier
@@ -116,26 +117,10 @@ app.post('/api/forms/publish', async (req, res) => {
     target: target_identifier,
     target_primary: req.body.target_primary,
     target_secondary: req.body.target_secondary,
+    encryption: req.body.encryption,
     published: true,
   })
-  const target = db.collection('targets').doc(target_identifier)
-  const doc = await target.get()
-  if (doc.exists) {
-    const data = doc.data()
-    var count = data["count"].toString()
-    var count = parseInt(count) + 1
-    await target.update({
-      count: count,
-      most_recent: Timestamp.now(),
-    })
-    res.send('Updated target ' + target_identifier + ' to ' + count)
-  } else {
-    await target.set({
-      count: 1,
-      first_created: Timestamp.now(),
-    })
-    res.send('Created target ' + target_identifier)
-  }
+  res.send('Published form ' + formId)
 })
 
 app.get('/api/forms/get/:id', async (req, res) => {

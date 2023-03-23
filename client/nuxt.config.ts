@@ -14,8 +14,8 @@ export default defineNuxtConfig({
           }
       },
       define: {
-          'process.env.BROWSER': true
-      }
+          'process.env.BROWSER': true,
+      },
   },
   runtimeConfig: {
     public: {

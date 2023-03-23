@@ -64,12 +64,12 @@
                       </select>
                     </div>
                     <div v-else-if="element.type === 'checkbox'">
+                      <button class="mr-3 bg-red-200 text-sm" @click="deleteField(element.id)">Delete</button>
+                      <button class=" bg-yellow-200 text-sm" @click="openModal(element.id, element.type)">Set up</button>
                       <div class="flex items-center mt-2">
                         <input type="checkbox" class="mr-2" />
                         <label class="block">{{ element.label }}</label>
                       </div>
-                      <button class="mr-3 bg-red-200 text-sm" @click="deleteField(element.id)">Delete</button>
-                      <button class=" bg-yellow-200 text-sm" @click="openModal(element.id, element.type)">Set up</button>
                     </div>
                   </div>
                   <button class="p-2 bg-blue-500 mt-4 rounded-md text-md text-white font-semibold">Submit form</button>
@@ -103,7 +103,11 @@
                           </label>
                           <input type="text" class="w-full p-2 border rounded"
                             placeholder="Paste a Magic Eden marketplace link to your collection" v-model="targetEl" />
-                          <h2 class="text-lg font-bold mb-4 mt-4">Step 4</h2>
+                          <h2 class="text-lg font-bold mb-4 mt-4">Step 4 (Optional)</h2>
+                          <button class="bg-blue-500 text-white rounded p-2 hover:bg-blue-600" @click="openEncryptModal">
+                            Enable encryption
+                          </button>
+                          <h2 class="text-lg font-bold mb-4 mt-4">Step 5</h2>
                           <div class="mb-4">
                             <button class="bg-blue-500 text-white rounded p-2 hover:bg-blue-600"
                               @click="openConfirmModal">
@@ -194,32 +198,87 @@
                     <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
                       Confirm details - {{ formData.name }}, {{ formElements.length - 1 }} fields
                     </DialogTitle>
-                    <div class="mt-2">
-                      <h1 class="mb-2"><span class="font-bold">{{ targetEl }}</span><br><span class="text-sm">holders are
-                          granted access to your form if a match for any of the following are found in their
-                          wallet:</span></h1>
-                      <ul>
-                        <li class="mb-2"><span class="bg-yellow-300">First verified creator:</span> {{
-                          resolvedTarget.firstVerifiedCreator }}</li>
-                        <li class="mb-2"><span class="bg-yellow-300">On-chain collection:</span> {{
-                          resolvedTarget.verifiedCollectionAddress }}</li>
-                      </ul>
-                      <div class="text-sm mt-4">
-                        <h1>Verify this by:</h1>
+                    <div class="mt-2" v-if="isTokenGated || isEncrypted">
+                      <div v-if="isEncrypted">
+                        <h1 class="mb-2 text-sm">• Form response encryption is enabled for this form. Ensure that you have downloaded
+                        the private key for this form.</h1>
+                      </div>
+                      <div v-if="isTokenGated">
+                        <h1 class="mb-2"><span class="text-sm">• {{ targetEl }} holders are
+                            granted access to your form if a match for any of the following are found in their
+                            wallet:</span></h1>
                         <ul>
-                          <li class="mt-2 mb-2">1. Navigating to your floor NFT on Magic Eden: <a
-                              :href='`https://magiceden.io/item-details/${resolvedTarget.mint}`'
-                              class="text-blue-500 underline">{{ resolvedTarget.name }}</a></li>
-                          <li>2. Ensuring that the metadata match. Example:</li>
-                          <img class="mt-3 mb-4" src="https://i.imgur.com/HD3shDj.png">
-                          <li>3. Ensuring that the floor NFT is a part of a verified Magic Eden collection (small
-                            checkmark on the top-right of your collection name). Example:</li>
-                          <img class="mt-3 mb-4" src="https://i.imgur.com/W8bP1In.png">
+                          <li class="mb-2 text-sm"><span class="bg-yellow-300">First verified creator:</span> {{
+                            resolvedTarget.firstVerifiedCreator }}</li>
+                          <li class="mb-2 text-sm"><span class="bg-yellow-300">On-chain collection:</span> {{
+                            resolvedTarget.verifiedCollectionAddress }}</li>
                         </ul>
+                        <div class="text-sm mt-4">
+                          <h1>Verify this by:</h1>
+                          <ul>
+                            <li class="mt-2 mb-2">1. Navigating to your floor NFT on Magic Eden: <a
+                                :href='`https://magiceden.io/item-details/${resolvedTarget.mint}`'
+                                class="text-blue-500 underline">{{ resolvedTarget.name }}</a></li>
+                            <li>2. Ensuring that the metadata match. Example:</li>
+                            <img class="mt-3 mb-4" src="https://i.imgur.com/HD3shDj.png">
+                            <li>3. Ensuring that the floor NFT is a part of a verified Magic Eden collection (small
+                              checkmark on the top-right of your collection name). Example:</li>
+                            <img class="mt-3 mb-4" src="https://i.imgur.com/W8bP1In.png">
+                          </ul>
+                        </div>
                       </div>
                       <button class="mt-2 bg-blue-500 p-2 text-sm text-white rounded-md"
                         @click="createForm">Confirm</button>
                     </div>
+                    <div class="mt-2" v-else>
+                      <h1 class="mb-2">This form is neither token-gated nor has its form responses encrypted.</h1>
+                      <button class="mt-2 bg-blue-500 p-2 text-sm text-white rounded-md"
+                        @click="createForm">Confirm</button>
+                    </div>
+                  </DialogPanel>
+                </TransitionChild>
+              </div>
+            </div>
+          </Dialog>
+        </TransitionRoot>
+      </section>
+      <section>
+        <TransitionRoot appear :show="isEncryptOpen" as="template">
+          <Dialog as="div" @close="closeEncryptModal" class="relative z-10">
+            <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
+              leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+              <div class="fixed inset-0 bg-black bg-opacity-25" />
+            </TransitionChild>
+
+            <div class="fixed inset-0 overflow-y-auto">
+              <div class="flex min-h-full items-center justify-center p-4 text-center">
+                <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
+                  enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
+                  leave-to="opacity-0 scale-95">
+                  <DialogPanel
+                    class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                    <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+                      Create encryption keys for {{ formData.name }}
+                    </DialogTitle>
+                    <div class="text-sm mt-2 mb-2">This encrypts your form's responses so that only you can read them.</div>
+                    <div class="text-sm mt-2">
+                      <h1 class="mb-1">Read carefully:</h1>
+                      <ul>
+                        <li class="mb-1">1. By enabling encryption, Maven enters a zero-knowledge state. This means that
+                          Maven is unable to see form response data.</li>
+                        <li class="mb-1">2. You will need to save the encryption keys in a safe place. If you lose them,
+                          you will not be able to decrypt your form response data and Maven cannot recover it for you.
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="mt-2">
+                      <label class="inline-flex items-center">
+                        <input type="checkbox" class="form-checkbox" v-model="agreeToTerms">
+                        <span class="ml-2 text-sm">I understand</span>
+                      </label>
+                    </div>
+                    <button :disabled="!agreeToTerms" class="mt-2 bg-blue-500 p-2 text-sm text-white rounded-md disabled:bg-gray-300"
+                      @click="createEncryption">Download key</button>
                   </DialogPanel>
                 </TransitionChild>
               </div>
@@ -235,6 +294,9 @@
 import axios from 'axios'
 import { onBeforeMount, ref } from 'vue'
 
+import fs from 'fs'
+import path from 'path'
+
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
@@ -246,6 +308,7 @@ import {
   DialogTitle,
 } from '@headlessui/vue'
 import { useToast } from "vue-toastification";
+import { isToken } from 'typescript'
 
 const route = useRoute()
 const formData = ref({})
@@ -257,7 +320,9 @@ onBeforeMount(async () => {
   console.log(route.params.id)
   const response = await axios.get('http://localhost/api/forms/get/' + route.params.id)
   formData.value = response.data // fields here
-  formElements.value = JSON.parse(formData.value.fields)
+  if (formData.value.fields != null) {
+    formElements.value = JSON.parse(formData.value.fields)
+  }
   isLoaded.value = true
   console.log(formData.value)
 })
@@ -269,10 +334,74 @@ var configType = ref('')
 const isConfirmOpen = ref(false)
 var resolvedTarget = ref('')
 
+const isEncryptOpen = ref(false)
+async function openEncryptModal() {
+  isEncryptOpen.value = true
+}
+
+var public_key = ref('')
+var agreeToTerms = ref(false)
+
+async function createEncryption() {
+  const keyPair = await window.crypto.subtle.generateKey(
+    {
+      name: "RSA-OAEP",
+      modulusLength: 2048,
+      publicExponent: new Uint8Array([1, 0, 1]),
+      hash: "SHA-256"
+    },
+    true,
+    ["encrypt", "decrypt"]
+  );
+  const privateKey = await window.crypto.subtle.exportKey(
+    "pkcs8",
+    keyPair.privateKey
+  );
+  const publicKeyBuffer = await window.crypto.subtle.exportKey(
+    "spki",
+    keyPair.publicKey
+  );
+  public_key.value = btoa(String.fromCharCode(...new Uint8Array(publicKeyBuffer)));
+  const privateKeyPEM = convertPrivate(privateKey);
+  const privateKeyFilename = formData.value.name + "_private_key.pem";
+  downloadFile(privateKeyPEM, privateKeyFilename);
+  toast.success("Encryption keys downloaded successfully!");
+  isEncryptOpen.value = false
+  function convertPrivate(arrayBuffer) {
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+    return `-----BEGIN PRIVATE KEY-----\n${base64}\n-----END PRIVATE KEY-----`;
+  }
+  function convertPublic(arrayBuffer) {
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+    return `-----BEGIN PUBLIC KEY-----\n${base64}\n-----END PUBLIC KEY-----`;
+  }
+  function downloadFile(data, filename) {
+    const a = document.createElement("a");
+    a.style.display = "none";
+    document.body.appendChild(a);
+    const blob = new Blob([data], { type: "application/octet-stream" });
+    const url = URL.createObjectURL(blob);
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  }
+}
+
+function closeEncryptModal() {
+  isEncryptOpen.value = false
+}
+
+var isTokenGated = ref(false)
+var isEncrypted = ref(false)
+
 async function openConfirmModal() {
-  if (targetEl.value == '') {
-    toast.error('Missing Magic Eden link!')
-    return
+  if (targetEl.value != '') {
+    isTokenGated.value = true
+  }
+  if (agreeToTerms.value == true) {
+    isEncrypted.value = true
   }
   await configureTarget()
   isConfirmOpen.value = true
@@ -282,7 +411,7 @@ async function configureTarget() {
   if (targetEl.value != '') {
     targetEl.value = targetEl.value.split('/');
     targetEl.value = targetEl.value[targetEl.value.length - 1];
-    const response = await axios.get(`https://api-mainnet.magiceden.dev/v2/collections/${targetEl.value}/listings?offset=0&limit=1`)
+    const response = await axios.get(`https://cors.mini-schnauzer.workers.dev/?url=https://api-mainnet.magiceden.dev/v2/collections/${targetEl.value}/listings?offset=0&limit=1`)
     const mint = response.data[0].tokenMint
     const url = `https://api.helius.xyz/v1/nfts?api-key=cc7ac7ca-a835-469a-9697-d46192c3710e`
     const describeNfts = async () => {
@@ -341,9 +470,7 @@ function removeOption(id, optionId) {
 }
 
 function deleteField(id) {
-  // Find the index of the element with the given ID
   const index = formElements.value.findIndex(elem => elem.id === id);
-  // If the element is found, remove it from the array and adjust the IDs of the remaining elements
   if (index !== -1) {
     formElements.value.splice(index, 1);
     for (let i = index; i < formElements.value.length; i++) {
@@ -374,12 +501,14 @@ async function submitConfig(id) {
 const toast = useToast();
 
 async function createForm() {
+  console.log(public_key.value)
   const response = await axios.post('http://localhost/api/forms/publish', {
     formId: route.params.id,
     fields: formElements.value,
     target_identifier: targetEl.value,
     target_primary: resolvedTarget.verifiedCollectionAddress || null,
-    target_secondary: resolvedTarget.firstVerifiedCreator,
+    target_secondary: resolvedTarget.firstVerifiedCreator || null,
+    encryption: public_key.value,
   })
   toast.success('Form published!')
   setTimeout(() => {

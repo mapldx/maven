@@ -13,7 +13,7 @@
           <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="px-4 py-8 sm:px-0">
               <div class="">
-                <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
                   <li v-for="doc in docs.forms" :key="doc.id"
                     class="col-span-1 divide-y divide-gray-200 rounded-2xl bg-gray-200">
                     <div class="flex w-full items-center justify-between space-x-6 p-6">
@@ -40,6 +40,13 @@
                             class="relative inline-flex w-0 flex-1 items-center justify-center rounded-br-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
                             <ChatBubbleLeftEllipsisIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
                             <span class="ml-3">Responses</span>
+                          </a>
+                        </div>
+                        <div class="-ml-px flex w-0 flex-1">
+                          <a :href="`/forms/responses/${doc.id}`"
+                            class="relative inline-flex w-0 flex-1 items-center justify-center rounded-br-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500">
+                            <ShareIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+                            <span class="ml-3">Share</span>
                           </a>
                         </div>
                         <div class="-ml-px flex w-0 flex-1" @click="deleteDoc(doc.id, doc.name, doc.desc)">
@@ -224,7 +231,7 @@
 </template>
 
 <script setup>
-import { ChatBubbleLeftEllipsisIcon, DocumentMagnifyingGlassIcon, DevicePhoneMobileIcon, EyeIcon, TrashIcon } from '@heroicons/vue/20/solid'
+import { ChatBubbleLeftEllipsisIcon, DocumentMagnifyingGlassIcon, DevicePhoneMobileIcon, EyeIcon, TrashIcon, ShareIcon } from '@heroicons/vue/20/solid'
 
 import { WalletMultiButton, useWallet } from 'solana-wallets-vue'
 import { useToast } from "vue-toastification";
