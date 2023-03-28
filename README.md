@@ -19,12 +19,9 @@
 
 This release of Maven is verified working on:
 * node v18.15.0
-  <br> Due to an issue with Node itself, if an error occurs during any of the yarn functions that contains 'ERR_OSSL_EVP_UNSUPPORTED':
-  ```sh
-  export NODE_OPTIONS=--openssl-legacy-provider
-  ```
 * yarn v1.22.19 (assuming that npm is installed)
 * Backpack v0.5.2-latest-beta-3925
+  * Ensure that Developer Mode is toggled on to be able to access the Simulator. Click your profile photo > Preferences > Developer Mode
 
 ### Installation
 
@@ -33,25 +30,20 @@ This release of Maven is verified working on:
    ```sh
    git clone https://github.com/mapldx/maven
    ```
-3. cd into each of the subdirectories ```api```, ```client```, ```layer```, and ```xnft```. Install dependencies in each:
+3. Make the start script executable
    ```sh
-   yarn install
+   chmod +x start.sh
    ```
-4. Separately in each of ```api```, ```layer```, and ```xnft``` subdirectories, run using:
+4. Run the start script
    ```sh
-   yarn dev
+   ./start.sh
    ```
-5. In ```client``` subdirectory, run using:
-   ```sh
-   yarn dev --port=8080
-   ```
-6. The expected result is to have all four subdirectories be running a process simultaneously.
 
 ### Notes
-* api subdirectory: Maven's back end routing and database interface
-* client subdirectory: front end to create, manage, and view responses to forms and sites
-* layer subdirectory: various user-facing interfaces to fill in forms and open sites
-* xnft subdirectory: wrapper for Backpack xNFT compatability standard
+* /api, running on localhost:90 – Maven's back end routing and database interface
+* /client, running on localhost:3000 – front end to create, manage, and view responses to forms and sites
+* /layer, running on localhost:3001 – web and xNFT user-facing interfaces to respond to forms and open sites
+* /xnft, running via Backpack Chrome Extension's Simulator – to interact with xNFT user-facing interface
 
 ## Built With
 
