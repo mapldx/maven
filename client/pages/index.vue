@@ -139,7 +139,7 @@
         </a>
       </div>
       <div class="mt-8 md:order-1 md:mt-0">
-        <p class="text-center text-xs leading-5 text-gray-500">&copy; Copyright 2023 usemaven.io. All rights reserved. Built with 🍕 in Indiana, US.</p>
+        <p class="text-center text-xs leading-5 text-gray-500">&copy; Copyright 2023 twitter.com/mapldx. All rights reserved. Built with 🍕 in Indiana, US.</p>
       </div>
     </div>
   </footer>
