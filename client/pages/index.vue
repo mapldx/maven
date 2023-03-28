@@ -173,7 +173,7 @@ useServerSeoMeta({
   description: 'A better way to do forms in Web 3. Say hello to Web 3\'s easiest plug-and-play solution for token-gated one-page sites.',
   ogDescription: 'A better way to do forms in Web 3. Say hello to Web 3\'s easiest plug-and-play solution for token-gated one-page sites.',
   ogImage: 'https://usemaven.app/icon.png',
-  twitterCard: 'summary_large_image',
+  twitterCard: 'summary',
 })
 
 const navigation = [
