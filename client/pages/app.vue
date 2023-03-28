@@ -128,8 +128,8 @@
           <div class="fixed bottom-0 left-0 w-full">
             <div class="bg-gray-200 text-center py-4">
               <img src="/logo/cover.png" class="inline-block align-middle w-24 h-auto" alt="Maven logo">
-              <p class="text-xs mt-3 font-light">© Copyright 2023 <a href="https://twitter.com/usemaven_" class="text-blue-500 underline">@usemaven_</a>. Created with 🍕 in Midwest, United States</p>
-              <p class="text-xs mt-2">Follow us on <a href="https://twitter.com/usemaven_" class="text-blue-500 underline">Twitter</a> or get in touch with us <a href="https://twitter.com/mapldx" class="text-blue-500 underline">here</a>.</p>
+              <p class="text-xs mt-3 font-light">© Copyright 2023 <a href="https://twitter.com/mapldx" target="_blank" class="text-blue-500 underline">twitter.com/mapldx</a>. Created with 🍕 in Indiana, US.</p>
+              <p class="text-xs mt-2">Follow us on <a href="https://twitter.com/usemaven_" class="text-blue-500 underline">Twitter</a>.
             </div>
           </div>
         </div>

@@ -172,6 +172,10 @@ async function encrypt(response) {
 }
 
 const submitForm = async () => {
+  if (wallet.publicKey.value == null) {
+    $toast.error('Please connect your wallet to submit this form')
+    return
+  }
   const address = wallet.publicKey.value.toString() || undefined
   var formData = formElements.value["fields"].reduce((acc, field) => {
     return {
@@ -186,10 +190,6 @@ const submitForm = async () => {
   console.log(formData)
   if (encryption_key.value.length > 0) {
     formData = await encrypt(formData)
-  }
-  if (address == null | address == undefined) {
-    $toast.error('Please connect your wallet to submit this form')
-    return
   }
   await axios.post('https://api.usemaven.app/api/forms/layer/submit', {
     id: form.value,
