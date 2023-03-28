@@ -43,7 +43,6 @@
 import axios from 'axios'
 
 const route = useRoute()
-const toast = useToast()
 
 var user = ref({})
 var address = ref('')
