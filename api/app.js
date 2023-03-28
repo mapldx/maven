@@ -8,7 +8,8 @@ const { initializeApp, applicationDefault, cert } = require('firebase-admin/app'
 const { getFirestore, Timestamp, FieldValue, arrayUnion } = require('firebase-admin/firestore');
 const serviceAccount = require("./serviceAccountKey.json");
 
-var uniqid = require('uniqid'); 
+var uniqid = require('uniqid');
+var path = require('path');
 
 initializeApp({
   credential: cert(serviceAccount)
@@ -24,8 +25,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/', async (req, res) => {
-  res.send('Hello from usemaven.app! Find us on Twitter at: @usemaven_')
+app.get('/', (req, res) => {
+  res.sendFile('index.html', {root: path.join(__dirname, 'public')});
 })
 
 app.post('/api/auth', async (req, res) => {
@@ -48,7 +49,6 @@ app.post('/api/auth', async (req, res) => {
     })
     console.log('Created new document for user')
   }
-
   res.send('Hello World!')
 })
 
