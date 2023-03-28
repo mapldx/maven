@@ -172,7 +172,7 @@ async function encrypt(response) {
 }
 
 const submitForm = async () => {
-  const address = wallet.publicKey.value.toString()
+  const address = wallet.publicKey.value.toString() || undefined
   var formData = formElements.value["fields"].reduce((acc, field) => {
     return {
       timestamp: Date.now(),
