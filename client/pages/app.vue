@@ -366,7 +366,7 @@ async function deleteSite(id, name, desc) {
 
 function copyToClipboard(variable) {
   variable = variable.substring(5, variable.length)
-  variable = 'localhost:53985/forms/view/' + variable
+  variable = 'https://layer.usemaven.app/forms/view/' + variable
   const el = document.createElement('textarea');
   el.value = variable;
   document.body.appendChild(el);

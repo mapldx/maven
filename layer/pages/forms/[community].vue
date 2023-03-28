@@ -11,7 +11,7 @@
             <div class="w-full">
               <ul role="list" class="bg-white divide-y divide-gray-200 w-full max-h-[65vh] overflow-y-auto ">
                 <li v-for="(form, index) in forms" :key="index">
-                  <a :href="`http://localhost:3000/connect/forms/u/view/${ids[index++]}?user=${user}`"
+                  <a :href="`http://layer.usemaven.app/forms/view/${ids[index++]}?user=${user}`"
                     class="block hover:bg-gray-200">
                     <div class="mx-8 p-2">
                       <div class="flex items-center justify-between">
@@ -55,8 +55,8 @@ const community = ref(route.params.community)
 const user = ref(route.query.user)
 
 async function fetchForms() {
-  console.log(`http://localhost/api/forms/${community.value}`)
-  await axios.get(`http://localhost/api/forms/${community.value}`)
+  console.log(`https://api.usemaven.app/api/forms/${community.value}`)
+  await axios.get(`https://api.usemaven.app/api/forms/${community.value}`)
     .then(response => {
       ids.value = response.data
     })
@@ -67,7 +67,7 @@ var forms = ref([])
 async function renderForms() {
   await fetchForms()
   for (let i = 0; i < ids.value.length; i++) {
-    const response = await axios.get(`http://localhost/api/forms/get/${ids.value[i]}`)
+    const response = await axios.get(`https://api.usemaven.app/api/forms/get/${ids.value[i]}`)
     console.log(response.data)
     const data = response.data
     forms.value.push({

@@ -41,7 +41,6 @@
 
 <script setup>
 import axios from 'axios'
-import { useToast } from 'vue-toastification'
 
 const route = useRoute()
 const toast = useToast()
@@ -53,6 +52,8 @@ var match = ref([])
 var valid = ref([])
 var selectedLink = ref('')
 var isLoading = ref(true)
+
+const { $toast } = useNuxtApp()
 
 async function fetchUser() {
   const { data } = await axios.get(`https://xnft-api-server.xnfts.dev/v1/users?user_id=${route.params.id}`)
@@ -76,7 +77,7 @@ async function fetchCommunities() {
       }
     }
   }
-  await axios.post('http://localhost/api/documents/match', { data: req })
+  await axios.post('https://api.usemaven.app/api/documents/match', { data: req })
     .then((res) => {
       match.value = res.data
     })
@@ -94,7 +95,7 @@ async function fetchCommunities() {
 
 function formIndex(community) {
   if (community == '') {
-    toast.error('Please select a community')
+    $toast.error('Please select a community')
     return
   }
   for (let i = 0; i < valid.value.length; i++) {

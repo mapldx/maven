@@ -58,23 +58,22 @@ import { BookmarkSquareIcon, BookOpenIcon, QueueListIcon, RssIcon } from '@heroi
 import { ChevronRightIcon } from '@heroicons/vue/20/solid'
 
 import { WalletMultiButton, useWallet } from 'solana-wallets-vue'
-import { useToast } from "vue-toastification";
 
 import axios from 'axios'
 
 const { publicKey } = useWallet()
 const { wallet, program } = useAnchor()
 
-const toast = useToast();
+const { $toast } = useNuxtApp()
 const isConnected = computed(() => !!wallet.value?.publicKey)
 const user_image = ref(null)
 
 watch(wallet, async () => {
   if (wallet.value?.publicKey) {
-    await axios.post('http://localhost/api/auth', { address: wallet.value?.publicKey.toString() })
+    await axios.post('https://api.usemaven.app/api/auth', { address: wallet.value?.publicKey.toString() })
     await retrieveUser()
     await fetchCommunities()
-    toast('Successfully connected to wallet!')
+    $toast('Successfully connected to wallet!')
   }
 })
 
@@ -113,7 +112,7 @@ async function fetchCommunities() {
       }
     }
   }
-  await axios.post('http://localhost/api/documents/match', { data: req })
+  await axios.post('https://api.usemaven.app/api/documents/match', { data: req })
     .then((res) => {
       match.value = res.data
     })
@@ -132,7 +131,7 @@ async function fetchCommunities() {
 function formIndex(community) {
   const address = wallet.value?.publicKey.toString()
   if (community == undefined || community == null || community == '') {
-    toast.error('Please select a community')
+    $toast.error('Please select a community')
     return
   }
   for (let i = 0; i < valid.value.length; i++) {
@@ -140,7 +139,7 @@ function formIndex(community) {
       community = valid.value[i][1]
     }
   }
-  navigateTo(`/connect/forms/u/${community}?user=${address}`)
+  navigateTo(`/forms/${community}?user=${address}`)
 }
 
 

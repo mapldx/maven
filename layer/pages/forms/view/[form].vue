@@ -61,10 +61,9 @@
 <script setup>
 import axios from 'axios'
 import { useWallet } from 'solana-wallets-vue';
-import { useToast } from 'vue-toastification';
 
 const route = useRoute()
-const toast = useToast()
+const { $toast } = useNuxtApp()
 
 const wallet = useWallet()
 
@@ -76,7 +75,7 @@ const isLoaded = ref(false)
 var encryption_key = ref('')
 
 async function renderForms() {
-  const response = await axios.get(`http://localhost/api/forms/get/${form.value}`)
+  const response = await axios.get(`https://api.usemaven.app/api/forms/get/${form.value}`)
   console.log(response.data)
   const data = response.data
   formElements.value.push({
@@ -177,13 +176,13 @@ const submitForm = async () => {
   if (encryption_key.value.length > 0) {
     formData = await encrypt(formData)
   }
-  await axios.post('http://localhost/api/forms/layer/submit', {
+  await axios.post('https://api.usemaven.app/api/forms/layer/submit', {
     id: form.value,
     response: formData
   })
     .then(function (res) {
       console.log(res);
-      toast.success('Form submitted successfully!')
+      $toast.success('Form submitted successfully!')
     })
 }
 
