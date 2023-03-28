@@ -4,7 +4,6 @@
       <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div class="flex lg:flex-1">
           <a href="#" class="-m-1.5 p-1.5">
-            <span class="sr-only">Your Company</span>
             <img class="h-8 w-auto" src="/logo/cover.png" alt="" />
           </a>
         </div>
@@ -20,41 +19,11 @@
               aria-hidden="true">&rarr;</span></a>
         </div>
       </nav>
-      <Dialog as="div" class="lg:hidden" @close="mobileMenuOpen = false" :open="mobileMenuOpen">
-        <div class="fixed inset-0 z-10" />
-        <DialogPanel
-          class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-white/10">
-          <div class="flex items-center justify-between">
-            <a href="#" class="-m-1.5 p-1.5">
-              <span class="sr-only">Your Company</span>
-              <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="" />
-            </a>
-            <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-400" @click="mobileMenuOpen = false">
-              <span class="sr-only">Close menu</span>
-              <XMarkIcon class="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-          <div class="mt-6 flow-root">
-            <div class="-my-6 divide-y divide-gray-500/25">
-              <div class="space-y-2 py-6">
-                <a v-for="item in navigation" :key="item.name" :href="item.href"
-                  class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-800">{{
-                    item.name }}</a>
-              </div>
-              <div class="py-6">
-                <a href="#"
-                  class="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-800">Log
-                  in</a>
-              </div>
-            </div>
-          </div>
-        </DialogPanel>
-      </Dialog>
     </header>
-    <section class="bg-white dark:bg-gray-900 pt-16">
+    <section class="bg-gray-900 pt-16">
       <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
         <a href="#"
-          class="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-100 rounded-full dark:bg-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+          class="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm rounded-full bg-gray-800 text-white hover:bg-gray-700"
           role="alert"><span
             class="pl-4 py-1.5 text-sm font-medium">Prefer reading a tweet thread?</span>
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -64,14 +33,14 @@
           </svg>
         </a>
         <h1
-          class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+          class="mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl text-white">
           There's a better way to do forms in Web 3</h1>
-        <p class="mb-8 text-lg font-normal text-gray-500 tracking-wide lg:text-xl sm:px-16 xl:px-48 dark:text-gray-200">
+        <p class="mb-8 text-lg font-normal tracking-wide lg:text-xl sm:px-16 xl:px-48 text-gray-200">
           Say hello to Web 3's easiest plug-and-play solution for token-gated one-page sites. Create endless value-add
           interactions for communities and events in 5 minutes or less.</p>
         <div class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
           <a href="#"
-            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900">
+            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 focus:ring-primary-900">
             Get in touch
             <svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd"
@@ -80,22 +49,22 @@
             </svg>
           </a>
           <a href="#"
-            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-black dark:border-gray-700 dark:focus:ring-gray-800 bg-white">
+            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center rounded-lg border hover:bg-gray-100 focus:ring-4 text-black border-gray-700 focus:ring-gray-800 bg-white">
             Get onboarded
           </a>
         </div>
         <div class="px-4 mx-auto text-center md:max-w-screen-md lg:max-w-screen-lg lg:px-36">
           <span class="font-semibold text-gray-400 uppercase">Built with best experience in mind for</span>
           <div class="flex flex-wrap justify-center items-center mt-8 text-gray-500 sm:justify-between">
-            <a href="#" class="mr-5 mb-5 lg:mb-0 hover:text-gray-800 dark:hover:text-gray-400">
+            <a href="#" class="mr-5 mb-5 lg:mb-0 hover:text-gray-400">
               <svg class="h-8" viewBox="0 0 128 106" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M120.471 52.0091H106.139C106.139 23.2846 82.3791 0 53.0684 0C24.1204 0 0.585366 22.7145 0.0093645 50.9471C-0.586549 80.1302 27.3517 105.472 57.1345 105.472H60.8807C87.1378 105.472 122.331 85.329 127.829 60.7858C128.845 56.2616 125.198 52.0091 120.471 52.0091ZM31.7705 53.2886C31.7705 57.1299 28.5648 60.2715 24.6452 60.2715C20.7255 60.2715 17.5198 57.1285 17.5198 53.2886V41.992C17.5198 38.1507 20.7255 35.0091 24.6452 35.0091C28.5648 35.0091 31.7705 38.1507 31.7705 41.992V53.2886ZM56.513 53.2886C56.513 57.1299 53.3073 60.2715 49.3877 60.2715C45.468 60.2715 42.2623 57.1285 42.2623 53.2886V41.992C42.2623 38.1507 45.4694 35.0091 49.3877 35.0091C53.3073 35.0091 56.513 38.1507 56.513 41.992V53.2886Z" fill="white"/>
               </svg>
             </a>
-            <a href="#" class="mr-5 mb-5 lg:mb-0 hover:text-gray-800 dark:hover:text-gray-400">
+            <a href="#" class="mr-5 mb-5 lg:mb-0 hover:text-gray-400">
               <img class="h-8" src="https://www.backpack.app/backpack.svg">
             </a>
-            <a href="#" class="mr-5 mb-5 lg:mb-0 hover:text-gray-800 dark:hover:text-gray-400">
+            <a href="#" class="mr-5 mb-5 lg:mb-0 text-gray-800 hover:text-gray-400">
               <img class="h-12 rounded-md" src="https://soladex.io/wp-content/uploads/2022/04/Glow-logo.png">
             </a>
             <img class="mr-5 mb-5 lg:mb-0 h-8 opacity-20" src="https://solanamobile.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fsolana_mobile_logotype.92ffc3bb.svg&w=256&q=75">
@@ -188,6 +157,11 @@ import {
   FingerPrintIcon,
   LockClosedIcon,
   ServerIcon,
+  ClockIcon,
+  DevicePhoneMobileIcon,
+  PaintBrushIcon,
+  WalletIcon,
+  AcademicCapIcon
 } from '@heroicons/vue/20/solid'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/vue/24/outline'
@@ -212,7 +186,7 @@ const features = [
   {
     name: 'Create forms in less than 5 minutes.',
     description: 'Web 3 isn\'t easy, and we\'re not here to make it harder. Click, set, paste, and you\'re set.',
-    icon: CloudArrowUpIcon,
+    icon: ClockIcon,
   },
   {
     name: 'Token-gate your forms without breaking a sweat.',
@@ -222,17 +196,17 @@ const features = [
   {
     name: 'Encrypt your form\'s responses to industry-standard.',
     description: 'Say goodbye to your data being subject to Web 2 practices. Only form creators can view and decrypt your responses.',
-    icon: ArrowPathIcon,
+    icon: FingerPrintIcon,
   },
   {
     name: 'Reach your community wherever they are.',
     description: 'Some experience Web 3 best on the go. We\'ve got you covered with a mobile-friendly experience.',
-    icon: ArrowPathIcon,
+    icon: DevicePhoneMobileIcon,
   },
   {
     name: 'Customize your form\'s look and feel.',
     description: 'Whether you\'re an individual, creator, project, or DAO, fit the form to your needs and your brand.',
-    icon: ArrowPathIcon,
+    icon: PaintBrushIcon,
   },
 ]
 
@@ -240,12 +214,12 @@ const uses = [
   {
     name: 'Request wallet addresses',
     description: 'to airdrop a POAP after a Twitter Spaces or Discord Stages event.',
-    icon: CloudArrowUpIcon,
+    icon: WalletIcon,
   },
   {
     name: 'Open applications',
     description: 'for your DAO or project\'s community positions.',
-    icon: LockClosedIcon,
+    icon: AcademicCapIcon,
   },
   {
     name: 'Collect genuine feedback',
@@ -253,7 +227,5 @@ const uses = [
     icon: ArrowPathIcon,
   },
 ]
-
-const mobileMenuOpen = ref(false)
 
 </script>

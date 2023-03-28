@@ -60,10 +60,13 @@
 
 <script setup>
 import axios from 'axios'
+import { useWallet } from 'solana-wallets-vue';
 import { useToast } from 'vue-toastification';
 
 const route = useRoute()
 const toast = useToast()
+
+const wallet = useWallet()
 
 const form = ref("form-" + route.params.form)
 console.log(form.value)
@@ -83,7 +86,9 @@ async function renderForms() {
     encryption: data.encryption
   })
   console.log(formElements.value)
-  encryption_key.value = formElements.value[0].encryption
+  if (formElements.value[0].encryption != undefined || formElements.value[0].encryption != null) {
+    encryption_key.value = formElements.value[0].encryption
+  }
 }
 
 async function encrypt(response) {
@@ -157,7 +162,7 @@ async function encrypt(response) {
 }
 
 const submitForm = async () => {
-  const address = route.query.user
+  const address = wallet.publicKey.value.toString()
   var formData = formElements.value["fields"].reduce((acc, field) => {
     return {
       timestamp: Date.now(),
@@ -168,8 +173,10 @@ const submitForm = async () => {
     }
   }, {})
   formData = JSON.stringify(formData)
-  formData = await encrypt(formData)
-
+  console.log(formData)
+  if (encryption_key.value.length > 0) {
+    formData = await encrypt(formData)
+  }
   await axios.post('http://localhost/api/forms/layer/submit', {
     id: form.value,
     response: formData

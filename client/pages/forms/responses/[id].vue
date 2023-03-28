@@ -48,48 +48,15 @@
             </div>
           </div>
         </div>
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" v-else-if="isEncrypted">
+          <h1>Form is currently encrypted</h1>
+          <input type="file" @change="handleFileUpload" />
+          {{ decryptedData }}
+        </div>
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" v-else>
-          <h1>Viewing responses for</h1>
+          <h1>Currently editing</h1>
           <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900">Loading data...</h1>
         </div>
-        <section>
-          <TransitionRoot appear :show="isEncryptOpen" as="template">
-            <Dialog as="div" @close="closeEncryptModal" class="relative z-10">
-              <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
-                leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
-                <div class="fixed inset-0 bg-black bg-opacity-25" />
-              </TransitionChild>
-
-              <div class="fixed inset-0 overflow-y-auto">
-                <div class="flex min-h-full items-center justify-center p-4 text-center">
-                  <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
-                    enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
-                    leave-to="opacity-0 scale-95">
-                    <DialogPanel
-                      class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                      <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
-                        Create encryption keys for {{ formData.name }}
-                      </DialogTitle>
-                      <div class="text-sm mt-2 mb-2">This encrypts your form's responses so that only you can read them.</div>
-                      <div class="text-sm mt-2">
-                        <h1 class="mb-1">Read carefully:</h1>
-                        <ul>
-                          <li class="mb-1">1. By enabling encryption, Maven enters a zero-knowledge state. This means that
-                            Maven is unable to see form response data.</li>
-                          <li class="mb-1">2. You will need to save the encryption keys in a safe place. If you lose them,
-                            you will not be able to decrypt your form response data and Maven cannot recover it for you.
-                          </li>
-                        </ul>
-                      </div>
-                      <button :disabled="!agreeToTerms" class="mt-2 bg-blue-500 p-2 text-sm text-white rounded-md disabled:bg-gray-300"
-                        @click="createEncryption">Download key</button>
-                    </DialogPanel>
-                  </TransitionChild>
-                </div>
-              </div>
-            </Dialog>
-          </TransitionRoot>
-        </section>
       </header>
     </div>
   </main>
@@ -110,49 +77,170 @@ var responses = ref([])
 var num_responses = ref(0)
 var stats = ref([])
 
-var isEncryptOpen = ref(false)
-async function openEncryptModal() {
-  isEncryptOpen.value = true
-}
+var isEncrypted = ref(false)
 
 onMounted(async () => {
-  const { data } = await axios.get(`http://localhost/api/forms/get/${id}`)
+  const { data } = await axios.get(`https://api.usemaven.app/api/forms/get/${id}`)
   formData.value = data
   fields.value = JSON.parse(formData.value.fields)
   responses.value = JSON.parse(formData.value.responses)
+  if (formData.value.encryption != undefined || formData.value.encryption != null) {
+    if (formData.value.encryption.length > 1) {
+      isEncrypted.value = true
+    }
+  }
   num_responses = responses.value.length
-  for (let i = 0; i < responses.value.length; i++) {
-    responses.value[i] = JSON.parse(responses.value[i])
+  console.log("Form is encrypted: " + isEncrypted.value)
+  if (!isEncrypted.value) {
+    console.log(responses.value)
+    for (let i = 0; i < responses.value.length; i++) {
+      responses.value[i] = JSON.parse(responses.value[i])
+    }
+    const addresses = responses.value.map(response => response.address);
+    const uniqueAddresses = new Set(addresses);
+    var response_stat = null
+    const timestamp = responses.value[num_responses - 1].timestamp
+    const currentTime = Date.now();
+    const diff = currentTime - timestamp;
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    if (days > 0) {
+      response_stat = `${days} day(s) ago`
+    } else if (hours > 0) {
+      response_stat = `${hours} hour(s) ago`
+    } else if (minutes > 0) {
+      response_stat = `${minutes} minute(s) ago`
+    } else {
+      response_stat = `${seconds} second(s) ago`
+    }
+    stats = [
+      { name: 'Number of Responses', stat: num_responses },
+      { name: 'Unique Respondents by Address', stat: uniqueAddresses.size },
+      { name: 'Most Recent Response', stat: response_stat },
+    ]
+    for (let i = 0; i < responses.value.length; i++) {
+      responses.value[i].timestamp = new Date(responses.value[i].timestamp).toLocaleString()
+    }
+    isLoaded.value = true
   }
-  const addresses = responses.value.map(response => response.address);
-  const uniqueAddresses = new Set(addresses);
-  var response_stat = null
-  const timestamp = responses.value[num_responses - 1].timestamp
-  const currentTime = Date.now();
-  const diff = currentTime - timestamp;
-  const seconds = Math.floor(diff / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-  if (days > 0) {
-    response_stat = `${days} day(s) ago`
-  } else if (hours > 0) {
-    response_stat = `${hours} hour(s) ago`
-  } else if (minutes > 0) {
-    response_stat = `${minutes} minute(s) ago`
-  } else {
-    response_stat = `${seconds} second(s) ago`
-  }
-  stats = [
-    { name: 'Number of Responses', stat: num_responses },
-    { name: 'Unique Respondents by Address', stat: uniqueAddresses.size },
-    { name: 'Most Recent Response', stat: response_stat },
-  ]
-  for (let i = 0; i < responses.value.length; i++) {
-    responses.value[i].timestamp = new Date(responses.value[i].timestamp).toLocaleString()
-  }
-  isLoaded.value = true
 })
+
+const decryptionKey = ref(null);
+const decryptedData = ref('');
+
+const handleFileUpload = async (event) => {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = async () => {
+    try {
+      const pemString = reader.result.toString();
+      const pemArray = pemString.split('\n').filter(line => line.trim() !== '');
+      const pem = pemArray.slice(1, pemArray.length - 1).join('');
+      const pemBuffer = new Uint8Array(atob(pem).split('').map(char => char.charCodeAt(0)));
+      
+      let privateKey;
+      try {
+        privateKey = await window.crypto.subtle.importKey(
+          "pkcs8",
+          pemBuffer,
+          {
+            name: "RSA-OAEP",
+            hash: { name: "SHA-256" },
+          },
+          true,
+          ["decrypt"]
+        );
+      } catch (error) {
+        console.error("Failed to import private key:", error);
+      }
+      var response = responses.value
+      var decryptedData = []
+      for (let i = 0; i < response.length; i++) {
+        var data = await decrypt(response[i], privateKey)
+        // console.log(data)
+        decryptedData.push(data)
+      }
+      responses.value = decryptedData
+      for (let i = 0; i < responses.value.length; i++) {
+        responses.value[i] = JSON.parse(responses.value[i])
+      }
+      const addresses = responses.value.map(response => response.address);
+      const uniqueAddresses = new Set(addresses);
+      var response_stat = null
+      const timestamp = responses.value[num_responses - 1].timestamp
+      const currentTime = Date.now();
+      const diff = currentTime - timestamp;
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      if (days > 0) {
+        response_stat = `${days} day(s) ago`
+      } else if (hours > 0) {
+        response_stat = `${hours} hour(s) ago`
+      } else if (minutes > 0) {
+        response_stat = `${minutes} minute(s) ago`
+      } else {
+        response_stat = `${seconds} second(s) ago`
+      }
+      stats = [
+        { name: 'Number of Responses', stat: num_responses },
+        { name: 'Unique Respondents by Address', stat: uniqueAddresses.size },
+        { name: 'Most Recent Response', stat: response_stat },
+      ]
+      for (let i = 0; i < responses.value.length; i++) {
+        responses.value[i].timestamp = new Date(responses.value[i].timestamp).toLocaleString()
+      }
+      isLoaded.value = true
+    } catch (Exception) {
+      console.error(Exception);
+    }
+  };
+  reader.readAsText(file);
+}
+
+async function decrypt(response, privateKey) {
+  const ciphertext = atob(response)
+  const ciphertextBuffer = new Uint8Array(ciphertext.split('').map(char => char.charCodeAt(0)));
+  const iv = ciphertextBuffer.subarray(0, 12);
+  const encryptedKey = ciphertextBuffer.subarray(iv.length, iv.length + 256);
+  const encryptedData = ciphertextBuffer.subarray(encryptedKey.length);
+  const decryptedSymmetricKey = await window.crypto.subtle.decrypt(
+    {
+      name: "RSA-OAEP",
+    },
+    privateKey,
+    encryptedKey
+  );
+  const jwkSymmetricKey = JSON.parse(
+    new TextDecoder().decode(decryptedSymmetricKey)
+  );
+  decryptedData.value = jwkSymmetricKey
+  const symmetricKey = await window.crypto.subtle.importKey(
+    "jwk",
+    jwkSymmetricKey,
+    {
+      name: "AES-GCM",
+      length: 256,
+    },
+    true,
+    ["encrypt", "decrypt"]
+  );
+  const encrypted = encryptedData.slice(12);
+  const decryptedCiphertext = await window.crypto.subtle.decrypt(
+    {
+      name: "AES-GCM",
+      iv: iv,
+    },
+    symmetricKey,
+    encrypted
+  );
+  const decrypted = new TextDecoder().decode(decryptedCiphertext);
+  decryptedData.value = decrypted;
+  return decryptedData.value
+}
 
 async function downloadCSV() {
   const jsonData = { data: responses.value };

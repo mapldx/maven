@@ -234,7 +234,6 @@
 import { ChatBubbleLeftEllipsisIcon, DocumentMagnifyingGlassIcon, DevicePhoneMobileIcon, EyeIcon, TrashIcon, ShareIcon } from '@heroicons/vue/20/solid'
 
 import { WalletMultiButton, useWallet } from 'solana-wallets-vue'
-import { useToast } from "vue-toastification";
 
 import axios from 'axios'
 
@@ -253,7 +252,7 @@ import { nextTick } from 'process';
 const { publicKey } = useWallet()
 const { wallet, program } = useAnchor()
 
-const toast = useToast();
+const { $toast } = useNuxtApp()
 
 const isOpen = ref(false)
 var isLoaded = ref(false)
@@ -288,13 +287,13 @@ async function newForm() {
     name: formName.value,
     desc: formDesc.value,
   }
-  axios.post('http://localhost/api/forms/create', data)
+  axios.post('https://api.usemaven.app/api/forms/create', data)
     .then(res => {
-      toast('Successfully created form!');
+      $toast('Successfully created form!');
       navigateTo(`/forms/edit/${res.data}`)
     })
     .catch(err => {
-      toast.error('Error creating form!');
+      $toast.error('Error creating form!');
     })
 }
 
@@ -305,13 +304,13 @@ async function newSite() {
     desc: siteDesc.value,
     shortcode: siteShortcode.value,
   }
-  axios.post('http://localhost/api/sites/create', data)
+  axios.post('https://api.usemaven.app/api/sites/create', data)
     .then(res => {
-      toast('Successfully created site!');
+      $toast('Successfully created site!');
       navigateTo(`/sites/edit/${res.data}`)
     })
     .catch(err => {
-      toast.error('Error creating site!');
+      $toast.error('Error creating site!');
     })
 }
 
@@ -322,13 +321,13 @@ async function deleteDoc(id, name, desc) {
     name: name,
     desc: desc,
   }
-  const res = await axios.post('http://localhost/api/forms/delete', data)
+  const res = await axios.post('https://api.usemaven.app/api/forms/delete', data)
   if (res.status == 200) {
-    toast('Successfully deleted form!');
+    $toast('Successfully deleted form!');
     const data = {
       address: await wallet.value?.publicKey.toString(),
     }
-    axios.post('http://localhost/api/documents/get', data)
+    axios.post('https://api.usemaven.app/api/documents/get', data)
       .then(res => {
         docs.value = res.data
       })
@@ -336,7 +335,7 @@ async function deleteDoc(id, name, desc) {
         console.log(err)
       })
   } else {
-    toast.error('Error deleting form!');
+    $toast.error('Error deleting form!');
   }
 }
 
@@ -347,13 +346,13 @@ async function deleteSite(id, name, desc) {
     name: name,
     desc: desc,
   }
-  const res = await axios.post('http://localhost/api/sites/delete', data)
+  const res = await axios.post('https://api.usemaven.app/api/sites/delete', data)
   if (res.status == 200) {
-    toast('Successfully deleted site!');
+    $toast('Successfully deleted site!');
     const data = {
       address: await wallet.value?.publicKey.toString(),
     }
-    axios.post('http://localhost/api/documents/get', data)
+    axios.post('https://api.usemaven.app/api/documents/get', data)
       .then(res => {
         docs.value = res.data
       })
@@ -361,7 +360,7 @@ async function deleteSite(id, name, desc) {
         console.log(err)
       })
   } else {
-    toast.error('Error deleting site!');
+    $toast.error('Error deleting site!');
   }
 }
 
@@ -374,7 +373,7 @@ function copyToClipboard(variable) {
   el.select();
   document.execCommand('copy');
   document.body.removeChild(el);
-  toast('Copied link to clipboard');
+  $toast('Copied link to clipboard');
 }
 
 let fetch;
@@ -383,7 +382,7 @@ onMounted(async () => {
     const data = {
       address: await wallet.value?.publicKey.toString(),
     }
-    axios.post('http://localhost/api/documents/get', data)
+    axios.post('https://api.usemaven.app/api/documents/get', data)
       .then(res => {
         docs.value = res.data
         isLoaded.value = true

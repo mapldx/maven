@@ -5,6 +5,7 @@
         <div class="fixed top-0 left-0 w-full">
           <div class="mt-6">
             <p class="text-center text-xl font-semibold">{{ formElements.name }}</p>
+            <span v-if="formElements.encryption_key.length > 0" class="inline-flex items-center rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">Responses are encrypted</span>
             <div class="shadow sm:rounded-md fixed top-20 left-0">
               <div class="divide-y divide-gray-200 w-screen max-h-[65vh] overflow-y-auto ">
                 <form class="px-3 pb-6">
@@ -36,6 +37,7 @@
                     </div>
                   </div>
                   <button @click.prevent="submitForm" class="p-2 bg-blue-500 mt-4 rounded-md text-md text-white font-semibold">Submit form</button>
+                  <p class="truncate text-xs mt-4 font-light" v-if="formElements.encryption_key.length > 1">The creator of this form has opted for its responses to be encrypted.</p>
                   <p class="truncate text-xs mt-4 font-light">This form was created by {{ formElements.owner }}</p>
                   <p class="text-xs font-light">Maven will not be held liable for the content on this form.</p>
                 </form>
@@ -80,6 +82,7 @@ async function renderForms() {
     owner: data.owner,
     name: data.name,
     fields: data.fields,
+    encryption_key: data.encryption
   })
   console.log(formElements.value)
 }

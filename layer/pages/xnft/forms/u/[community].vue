@@ -9,7 +9,7 @@
       <div class="shadow sm:rounded-md fixed top-24 left-0">
         <ul role="list" class="bg-white divide-y divide-gray-200 w-screen max-h-[65vh] overflow-y-auto ">
           <li v-for="(form, index) in forms" :key="index">
-            <a :href="`http://localhost:3000/xnft/forms/u/view/${ids[index++]}?user=${user}`" class="block hover:bg-gray-200">
+            <a :href="`http://localhost:8080/xnft/forms/u/view/${ids[index++]}?user=${user}`" class="block hover:bg-gray-200">
               <div class="mx-8 p-2">
                 <div class="flex items-center justify-between">
                   <p class="text-sm text-left font-medium text-indigo-600">{{ form.name }}</p>

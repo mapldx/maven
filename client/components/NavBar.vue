@@ -58,7 +58,6 @@
 
 <script setup>
 import { WalletMultiButton, useWallet } from 'solana-wallets-vue'
-import { useToast } from "vue-toastification";
 
 import { DisclosureButton } from '@headlessui/vue'
 import { BellIcon } from '@heroicons/vue/24/outline'
@@ -78,10 +77,10 @@ const { wallet, program } = useAnchor()
 
 const route = useRoute()
 
-const toast = useToast();
+const { $toast } = useNuxtApp()
 watch(wallet, () => {
     if(!wallet.value?.publicKey) {
-      toast('Successfully disconnected wallet!');
+      $toast('Successfully disconnected wallet!');
       navigateTo('/')
     }
 })

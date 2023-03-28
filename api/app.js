@@ -6,7 +6,7 @@ app.use(express.json());
 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue, arrayUnion } = require('firebase-admin/firestore');
-const serviceAccount = require("../serviceAccountKey.json");
+const serviceAccount = require("./serviceAccountKey.json");
 
 var uniqid = require('uniqid'); 
 
@@ -25,7 +25,7 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', async (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello from usemaven.app! Find us on Twitter at: @usemaven_')
 })
 
 app.post('/api/auth', async (req, res) => {

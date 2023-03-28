@@ -307,8 +307,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/vue'
-import { useToast } from "vue-toastification";
-import { isToken } from 'typescript'
 
 const route = useRoute()
 const formData = ref({})
@@ -318,7 +316,7 @@ const runtimeConfig = useRuntimeConfig()
 
 onBeforeMount(async () => {
   console.log(route.params.id)
-  const response = await axios.get('http://localhost/api/forms/get/' + route.params.id)
+  const response = await axios.get('https://api.usemaven.app/api/forms/get/' + route.params.id)
   formData.value = response.data // fields here
   if (formData.value.fields != null) {
     formElements.value = JSON.parse(formData.value.fields)
@@ -365,7 +363,7 @@ async function createEncryption() {
   const privateKeyPEM = convertPrivate(privateKey);
   const privateKeyFilename = formData.value.name + "_private_key.pem";
   downloadFile(privateKeyPEM, privateKeyFilename);
-  toast.success("Encryption keys downloaded successfully!");
+  $toast.success("Encryption keys downloaded successfully!");
   isEncryptOpen.value = false
   function convertPrivate(arrayBuffer) {
     const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
@@ -498,11 +496,11 @@ async function submitConfig(id) {
   closeModal()
 }
 
-const toast = useToast();
+const { $toast } = useNuxtApp()
 
 async function createForm() {
   console.log(public_key.value)
-  const response = await axios.post('http://localhost/api/forms/publish', {
+  const response = await axios.post('https://api.usemaven.app/api/forms/publish', {
     formId: route.params.id,
     fields: formElements.value,
     target_identifier: targetEl.value,
@@ -510,7 +508,7 @@ async function createForm() {
     target_secondary: resolvedTarget.firstVerifiedCreator || null,
     encryption: public_key.value,
   })
-  toast.success('Form published!')
+  $toast.success('Form published!')
   setTimeout(() => {
     navigateTo('/app')
   }, 2000)
