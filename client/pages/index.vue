@@ -22,7 +22,7 @@
     </header>
     <section class="bg-gray-900 pt-16">
       <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
-        <a href="#"
+        <a href="https://twitter.com/mapldx/status/1634737381059309568" target="_blank"
           class="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm rounded-full bg-gray-800 text-white hover:bg-gray-700"
           role="alert"><span
             class="pl-4 py-1.5 text-sm font-medium">Prefer reading a tweet thread?</span>
@@ -39,9 +39,9 @@
           Say hello to Web 3's easiest plug-and-play solution for token-gated one-page sites. Create endless value-add
           interactions for communities and events in 5 minutes or less.</p>
         <div class="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-          <a href="#"
+          <a href="https://twitter.com/usemaven_" target="_blank"
             class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 focus:ring-primary-900">
-            Get in touch
+            Follow on Twitter
             <svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd"
                 d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
@@ -72,8 +72,8 @@
         </div>
       </div>
     </section>
-    <div class="bg-gray-900 py-12 sm:py-16 sm:pb-32">
-      <div class="relative overflow-hidden pt-16">
+    <div class="bg-gray-900 py-8 sm:py-16 sm:pb-32">
+      <div class="relative overflow-hidden lg:pt-16">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
           <img src="/preview.png" alt="App screenshot" class="mb-[-12%] rounded-xl shadow-2xl ring-1 ring-white/10"
             width="2432" height="1442" />
@@ -126,7 +126,7 @@
         <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Ready to make magic happen? 🫡<br />All features are free to use in beta.</h2>
         <div class="mt-10 flex items-center gap-x-6 lg:mt-0 lg:flex-shrink-0">
           <a href="#" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get onboarded</a>
-          <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Get in touch <span aria-hidden="true">→</span></a>
+          <a href="https://twitter.com/usemaven_" target="_blank" class="text-sm font-semibold leading-6 text-gray-900">Follow on Twitter <span aria-hidden="true">→</span></a>
         </div>
       </div>
     </div>
@@ -200,7 +200,7 @@ const features = [
   },
   {
     name: 'Reach your community wherever they are.',
-    description: 'Some experience Web 3 best on the go. We\'ve got you covered with a mobile-friendly experience.',
+    description: 'Some experience Web 3 best on the go. We\'ve got you covered with a mobile-friendly experience for your target audience.',
     icon: DevicePhoneMobileIcon,
   },
   {
