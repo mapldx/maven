@@ -1,14 +1,13 @@
 <template>
   <div class="bg-white">
     <main>
-      <NavBar />
-      <div class="mx-auto w-full max-w-7xl px-6 pt-20 pb-16">
-        <div class="mx-auto mt-18 max-w-2xl text-center">
+        <NavBar />
+      <div class="mx-auto w-screen pt-8 lg:pt-16">
+        <div class="mx-auto mt-18 text-center">
           <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900">{{ formElements.name }}</h1>
         </div>
-        <div class="mx-auto mt-8 flow-root max-w-lg">
-          <div class="flex items-center justify-center">
-            <form class="px-3 pb-6">
+        <div class="mx-auto mt-8 max-w-screen w-screen lg:max-w-lg">
+            <form class="pb-6 px-3">
               <div v-for="element in formElements.fields" :key="element.id">
                 <div v-if="element.type == 'header'">
                   <img :src="element.src">
@@ -36,18 +35,17 @@
                   </div>
                 </div>
               </div>
-              <button @click.prevent="submitForm" class="p-2 bg-blue-500 mt-4 rounded-md text-md text-white font-semibold">Submit form</button>
+              <button @click.prevent="submitForm" class="p-2 bg-blue-500 mt-8 rounded-md text-md text-white font-semibold">Submit form</button>
               <p class="truncate text-xs mt-4 font-light" v-if="encryption_key.length > 1">The creator of this form has opted for its responses to be encrypted.</p>
               <p class="truncate text-xs mt-4 font-light">This form was created by {{ formElements.owner }}.</p>
               <p class="text-xs font-light">Maven will not be held liable for the content on this form.</p>
-              <p class="text-xs font-light mt-2 mb-2 underline text-blue-500"><a :href="'https://twitter.com/intent/tweet?via=usemaven_&text=Report%3A%20' + form">Report this form</a></p>
+              <p class="text-xs font-light mt-2 underline text-blue-500"><a :href="'https://twitter.com/intent/tweet?via=usemaven_&text=Report%3A%20' + form">Report this form</a></p>
             </form>
           </div>
         </div>
-      </div>
     </main>
     <div>
-      <div class="fixed bottom-0 left-0 w-full">
+      <div class="lg:fixed bottom-0 left-0 w-full">
         <div class="bg-gray-200 text-center py-4">
           <p class="text-md font-semibold">Create your own Web 3 forms and sites at <a href="https://twitter.com/usemaven_"
               class="text-blue-500 underline">@usemaven_</a></p>
