@@ -176,6 +176,10 @@ const submitForm = async () => {
   if (encryption_key.value.length > 0) {
     formData = await encrypt(formData)
   }
+  if (address == null | address == undefined) {
+    $toast.error('Please connect your wallet to submit this form')
+    return
+  }
   await axios.post('https://api.usemaven.app/api/forms/layer/submit', {
     id: form.value,
     response: formData
