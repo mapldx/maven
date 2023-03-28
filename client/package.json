@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "NODE_TLS_REJECT_UNAUTHORIZED=0 nuxt dev --https --ssl-cert 192.168.1.133.pem --ssl-key 192.168.1.133-key.pem",
+    "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
