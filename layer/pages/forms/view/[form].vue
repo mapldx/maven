@@ -81,6 +81,7 @@ async function renderForms() {
   formElements.value.push({
     owner: data.owner,
     name: data.name,
+    desc: data.description,
     fields: data.fields,
     encryption: data.encryption
   })
@@ -89,6 +90,16 @@ async function renderForms() {
     encryption_key.value = formElements.value[0].encryption
   }
 }
+
+useSeoMeta({
+  title: () => `Maven - ${formElements.value.name}`,
+  ogTitle: () => `Your forms on Maven - ${formElements.value.name}`,
+  description: () => `description: ${formElements.value.desc}`,
+  ogDescription: () => `description: ${formElements.value.desc}`,
+  image: () => 'https://usemaven.app/icon.png',
+  ogImage: () => 'https://usemaven.app/icon.png',
+  twitterCard: () => 'summary',
+})
 
 async function encrypt(response) {
   const publicKeyBuffer = new Uint8Array(atob(encryption_key.value).split('').map(char => char.charCodeAt(0)));
