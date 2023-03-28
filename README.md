@@ -11,6 +11,8 @@
     <a href="https://twitter.com/usemaven_">Follow on Twitter</a>
     ·
     <a href="https://twitter.com/mapldx">Get in Touch</a>
+    ·
+    <a href="https://usemaven.app">Go to Website</a>
   </p>
 </div>
 
@@ -40,7 +42,7 @@ This release of Maven is verified working on:
    ```
 
 ### Notes
-* /api, running on localhost:90 – Maven's back end routing and database interface
+* /api, running on localhost:80 – Maven's back end routing and database interface
 * /client, running on localhost:3000 – front end to create, manage, and view responses to forms and sites
 * /layer, running on localhost:3001 – web and xNFT user-facing interfaces to respond to forms and open sites
 * /xnft, running via Backpack Chrome Extension's Simulator – to interact with xNFT user-facing interface
@@ -63,4 +65,4 @@ Purdue University–Main Campus, IN<br>
 
 LinkedIn: https://www.linkedin.com/in/zwcsy/<br>
 Email: zacharycsy (at) gmail (dot) com<br>
-Discord: zachio (hashtag) 0123
+Discord: mapldx (hashtag) 0123
