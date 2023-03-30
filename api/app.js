@@ -17,14 +17,19 @@ initializeApp({
 const db = getFirestore();
 
 app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
+  const allowedOrigins = ['https://usemaven.app', 'https://layer.usemaven.app', 'http://localhost:3000'];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   );
   next();
 });
-
 app.get('/', (req, res) => {
   res.sendFile('index.html', {root: path.join(__dirname, 'public')});
 })
