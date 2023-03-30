@@ -320,6 +320,9 @@ onBeforeMount(async () => {
   formData.value = response.data // fields here
   if (formData.value.fields != null) {
     formElements.value = JSON.parse(formData.value.fields)
+    if (formData.value.encryption != null) {
+      isEncrypted.value = true
+    }
   }
   isLoaded.value = true
   console.log(formData.value)

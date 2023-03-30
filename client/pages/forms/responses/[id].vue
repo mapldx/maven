@@ -9,7 +9,8 @@
           <div class="mt-8">
             <h3 class="text-base font-semibold leading-6 text-gray-900">Overview</h3>
             <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-              <div v-for="item in stats" :key="item.name" class="overflow-hidden rounded-lg bg-gray-200 px-4 py-5 shadow-lg sm:p-6">
+              <div v-for="item in stats" :key="item.name"
+                class="overflow-hidden rounded-lg bg-gray-200 px-4 py-5 shadow-lg sm:p-6">
                 <dt class="truncate text-sm font-medium text-gray-500">{{ item.name }}</dt>
                 <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{{ item.stat }}</dd>
               </div>
@@ -21,7 +22,9 @@
                 <h1 class="text-base font-semibold leading-6 text-gray-900">Responses</h1>
               </div>
               <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                <button type="button" @click="downloadCSV" class="block rounded-md bg-indigo-600 py-2 px-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Export as CSV</button>
+                <button type="button" @click="downloadCSV"
+                  class="block rounded-md bg-indigo-600 py-2 px-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Export
+                  as CSV</button>
               </div>
             </div>
             <div class="mt-8 flow-root">
@@ -31,14 +34,18 @@
                     <table class="min-w-full divide-y divide-gray-300">
                       <thead class="bg-gray-50">
                         <tr>
-                          <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">#</th>
-                          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900" v-for="label in Object.keys(responses[0])" :key="label">{{ label }}</th>
+                          <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">#
+                          </th>
+                          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                            v-for="label in Object.keys(responses[0])" :key="label">{{ label }}</th>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
                         <tr v-for="(response, index) in responses" :key="index">
-                          <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ index }}</td>
-                          <td class="whitespace-normal px-3 py-4 text-sm text-gray-500" v-for="field in Object.keys(responses[0])" :key="field">{{ response[field] }}</td>
+                          <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ index
+                          }}</td>
+                          <td class="whitespace-normal px-3 py-4 text-sm text-gray-500"
+                            v-for="field in Object.keys(responses[0])" :key="field">{{ response[field] }}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -48,10 +55,27 @@
             </div>
           </div>
         </div>
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" v-else-if="isEncrypted">
-          <h1>Form is currently encrypted</h1>
-          <input type="file" @change="handleFileUpload" />
-          {{ decryptedData }}
+        <div class="fixed left-0 w-full h-[10%] flex items-center justify-center" v-else-if="isEncrypted">
+          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col items-center">
+              <p class="mb-4">{{ id }} is encrypted</p>
+              <div class="flex items-center">
+                <input type="file" class="hidden" @change="handleFileUpload" id="fileInput" />
+                <label for="fileInput" class="bg-blue-500 p-3 text-sm text-white rounded-md cursor-pointer">Upload
+                  decryption key</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fixed left-0 w-full h-[10%] flex items-center justify-center" v-else-if="responses.length == 0">
+          <div class="max-w-7xl">
+            <div class="flex flex-col items-center">
+              <p class="mb-2">{{ id }} is awaiting responses</p>
+              <div class="flex items-center">
+                <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900">No responses yet</h1>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" v-else>
           <h1>Currently editing</h1>
@@ -78,6 +102,7 @@ var num_responses = ref(0)
 var stats = ref([])
 
 var isEncrypted = ref(false)
+var { $toast } = useNuxtApp()
 
 onMounted(async () => {
   const { data } = await axios.get(`https://api.usemaven.app/api/forms/get/${id}`)
@@ -91,7 +116,7 @@ onMounted(async () => {
   }
   num_responses = responses.value.length
   console.log("Form is encrypted: " + isEncrypted.value)
-  if (!isEncrypted.value) {
+  if (!isEncrypted.value && responses.value.length > 0) {
     console.log(responses.value)
     for (let i = 0; i < responses.value.length; i++) {
       responses.value[i] = JSON.parse(responses.value[i])
@@ -139,7 +164,7 @@ const handleFileUpload = async (event) => {
       const pemArray = pemString.split('\n').filter(line => line.trim() !== '');
       const pem = pemArray.slice(1, pemArray.length - 1).join('');
       const pemBuffer = new Uint8Array(atob(pem).split('').map(char => char.charCodeAt(0)));
-      
+
       let privateKey;
       try {
         privateKey = await window.crypto.subtle.importKey(
@@ -157,9 +182,17 @@ const handleFileUpload = async (event) => {
       }
       var response = responses.value
       var decryptedData = []
+      if (response.length == 0) {
+        $toast('Form has no responses yet', {
+          type: 'error',
+          position: 'top-center',
+          duration: 5000
+        })
+        return
+      }
       for (let i = 0; i < response.length; i++) {
         var data = await decrypt(response[i], privateKey)
-        // console.log(data)
+        console.log(data)
         decryptedData.push(data)
       }
       responses.value = decryptedData
@@ -258,10 +291,10 @@ async function downloadCSV() {
 
 function convertToCSV(jsonData) {
   const items = jsonData.data;
-  const replacer = (key, value) => (value === null ? '' : value); 
+  const replacer = (key, value) => (value === null ? '' : value);
   const header = Object.keys(items[0]);
   const csv = [
-    header.join(','), 
+    header.join(','),
     ...items.map((row) =>
       header
         .map((fieldName) => JSON.stringify(row[fieldName], replacer))
