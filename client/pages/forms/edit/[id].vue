@@ -448,6 +448,7 @@ function closeModal() {
 function openModal(id, type) {
   configId.value = id
   inputName = formElements.value[id].label
+  inputPlaceholder = formElements.value[id].placeholder
   configType.value = type
   isOpen.value = true
 }
@@ -494,17 +495,28 @@ async function submitConfig(id) {
   if (inputName.length < 1) {
     inputName = 'Untitled'
   }
-  inputPlaceholder = inputPlaceholder.trim()
-  if (inputPlaceholder.length < 1) {
-    inputPlaceholder = null
+  if (formElements.value[id].type == 'text' || formElements.value[id].type == 'textarea') {
+    inputPlaceholder = inputPlaceholder.trim()
+    if (inputPlaceholder.length < 1) {
+      inputPlaceholder = null
+    }
   }
   formElements.value[id].label = inputName
   formElements.value[id].required = inputRequired.value
   formElements.value[id].placeholder = inputPlaceholder
-  for (var i = 0; i < formElements.value[id].options.length; i++) {
-    formElements.value[id].options[i].value = formElements.value[id].options[i].label.toLowerCase().replace(/ /g, '-')
+  if (formElements.value[id].type == 'select') {
+    for (var i = 0; i < formElements.value[id].options.length; i++) {
+      formElements.value[id].options[i].label = formElements.value[id].options[i].label.trim()
+      if (formElements.value[id].options[i].label.length < 1) {
+        formElements.value[id].options[i].label = 'Untitled'
+      }
+    }
   }
-  closeModal()
+  console.log(isOpen.value)
+  isOpen.value = false
+  inputName = ''
+  inputRequired.value = false
+  inputPlaceholder = ''
 }
 
 const { $toast } = useNuxtApp()
