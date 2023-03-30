@@ -96,7 +96,7 @@ async function renderForms() {
 
 useSeoMeta({
   title: () => `Maven - ${formElements.value.name}`,
-  ogTitle: () => `Your forms on Maven`,
+  ogTitle: () => `Your form on Maven`,
   description: () => 'Create your own token-gated forms and sites at usemaven.app in 5 minutes or less.',
   ogDescription: () => 'Create your own token-gated forms and sites at usemaven.app in 5 minutes or less.',
   image: () => 'https://usemaven.app/icon.png',

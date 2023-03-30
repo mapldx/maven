@@ -171,8 +171,8 @@ import { defineComponent, h } from 'vue'
 useServerSeoMeta({
   title: 'Maven - Web 3 value-add interactions in 5 minutes or less',
   ogTitle: 'Maven - Web 3 value-add interactions in 5 minutes or less',
-  description: 'A better way to do forms in Web 3. Say hello to Web 3\'s easiest plug-and-play solution for token-gated one-page sites.',
-  ogDescription: 'A better way to do forms in Web 3. Say hello to Web 3\'s easiest plug-and-play solution for token-gated one-page sites.',
+  description: 'A better way to do forms in Web 3. Say hello to Web 3\'s easiest plug-and-play solution for token-gated one-page sites for creators, communities, project teams, and events.',
+  ogDescription: 'A better way to do forms in Web 3. Say hello to Web 3\'s easiest plug-and-play solution for token-gated one-page sites for creators, communities, project teams, and events.',
   ogImage: 'https://usemaven.app/icon.png',
   twitterCard: 'summary',
 })

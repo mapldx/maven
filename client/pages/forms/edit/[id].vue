@@ -17,7 +17,6 @@
         <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
           <main class="mt-8 pb-8">
             <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-              <h1 class="sr-only">Page title</h1>
               <!-- Main 3 column grid -->
               <div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8 bg-gray-200 p-8 rounded-lg">
                 <!-- Form preview -->
@@ -96,7 +95,7 @@
                               </button>
                             </div>
                           </div>
-                          <h2 class="text-lg font-bold mb-4">Step 3</h2>
+                          <h2 class="text-lg font-bold mb-4">Step 3 (Optional)</h2>
                           <label class="block mb-2 mt-4 relative">Who can access this form?
                             <button class="absolute top-0 right-0 bg-yellow-200 text-sm">e.g.
                               https://magiceden.io/marketplace/lily</button>
