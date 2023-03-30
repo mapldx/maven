@@ -17,7 +17,7 @@ initializeApp({
 const db = getFirestore();
 
 app.use(function(req, res, next) {
-  const allowedOrigins = ['https://usemaven.app', 'https://layer.usemaven.app', 'http://localhost:3000'];
+  const allowedOrigins = ['https://usemaven.app', 'https://www.usemaven.app', 'https://layer.usemaven.app', 'http://localhost:3000'];
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
