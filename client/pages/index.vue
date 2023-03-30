@@ -161,7 +161,8 @@ import {
   DevicePhoneMobileIcon,
   PaintBrushIcon,
   WalletIcon,
-  AcademicCapIcon
+  AcademicCapIcon,
+  StarIcon
 } from '@heroicons/vue/20/solid'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/vue/24/outline'
@@ -217,6 +218,11 @@ const features = [
     description: 'Whether you\'re an individual, creator, project, or DAO, fit the form to your needs and your brand.',
     icon: PaintBrushIcon,
   },
+  {
+    name: 'Make Web 3 more friendly with us.',
+    description: 'A best-in-class experience for your forms on any browser, Phantom on mobile, Glow Wallet on iOS Safari, and soon on Backpack xNFT and Saga Mobile.',
+    icon: StarIcon,
+  }
 ]
 
 const uses = [
