@@ -17,6 +17,12 @@
                 <input type="text" class="w-full p-2 border rounded" :placeholder="element.placeholder"
                   :required="element.required" v-model="element.value" />
               </div>
+              <div v-else-if="element.type === 'file'" class="mt-3">
+                <label class="block text-sm font-medium text-left text-gray-700 mb-2">{{ element.label }}</label>
+                <input type="file" @change="onFileChange">
+                <button @click.prevent="uploadFile(element.id)" class="bg-blue-500 text-white p-1.5 px-2 rounded-md">Upload file</button>
+                <input v-model="element.value" type="text" class="hidden" :placeholder="Upload"/>
+              </div>
               <div v-else-if="element.type === 'textarea'" class="mt-3">
                 <label class="block text-sm font-medium text-left text-gray-700">{{ element.label }}</label>
                 <textarea class="w-full p-2 border rounded" :placeholder="element.placeholder"
@@ -69,9 +75,10 @@ const route = useRoute()
 const { $toast } = useNuxtApp()
 
 const wallet = useWallet()
+const runtimeConfig = useRuntimeConfig()
 
 const form = ref("form-" + route.params.form)
-console.log(form.value)
+const uploadURL = ref(null)
 
 const formElements = ref([])
 const isLoaded = ref(false)
@@ -179,6 +186,14 @@ const submitForm = async () => {
     $toast.error('Please connect your wallet to submit this form')
     return
   }
+  for (var i = 0; i < formElements.value["fields"].length; i++) {
+    if (formElements.value["fields"][i].type == "file") {
+      if (upload.value != null && formElements.value["fields"][i].value == "") {
+        $toast.error('Don\'t forget to click "Upload file" after selecting your file!')
+        return
+      }
+    }
+  }
   const address = wallet.publicKey.value.toString() || undefined
   var formData = formElements.value["fields"].reduce((acc, field) => {
     return {
@@ -202,6 +217,55 @@ const submitForm = async () => {
       console.log(res);
       $toast.success('Form submitted successfully!')
     })
+}
+
+var upload = ref(null)
+async function onFileChange(event) {
+  upload.value = event.target.files[0];
+}
+
+async function uploadFile(id) {
+  if (upload.value == null) {
+    $toast.error('Please select a photo to upload first')
+    return
+  }
+  console.log(id)
+  const file = upload.value;
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  const res = ref(null)
+  reader.onload = async () => {
+    const img = new Image();
+    img.src = reader.result;
+    img.onload = async () => {
+      if (img.width > img.height) {
+        const base64String = reader.result.split(',')[1];
+        const apiEndpoint = 'https://api.imgbb.com/1/upload';
+        const clientApiKey = runtimeConfig.public.IMGBB_API;
+        const formData = new FormData();
+        formData.append('image', base64String);
+        const config = {
+          headers: {
+            'content-type': 'multipart/form-data'
+          },
+          params: {
+            key: clientApiKey
+          }
+        };
+        axios.post(apiEndpoint, formData, config)
+          .then(response => {
+            formElements.value["fields"][id].value = response.data.data.url
+            $toast.success('Image uploaded successfully!')
+          })
+          .catch(error => {
+            console.log(error);
+            $toast.error('There was an error uploading your image. Please try again.')
+          });
+      } else {
+        alert('The uploaded image must be in landscape orientation.');
+      }
+    };
+  };
 }
 
 onBeforeMount(async () => {

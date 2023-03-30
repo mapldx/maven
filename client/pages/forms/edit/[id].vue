@@ -49,6 +49,15 @@
                       </label>
                       <textarea class="w-full p-2 border rounded" :placeholder="element.placeholder"></textarea>
                     </div>
+                    <div v-else-if="element.type === 'file'">
+                      <label class="block mb-2 mt-4 relative">{{ element.label }}
+                        <button class="absolute top-0 right-0 bg-yellow-200 text-sm"
+                          @click="openModal(element.id, element.type)">Set up</button>
+                        <button class="absolute top-0 right-0 mr-14 bg-red-200 text-sm"
+                          @click="deleteField(element.id)">Delete</button>
+                      </label>
+                      <input type="file" class="w-full border rounded">
+                    </div>
                     <div v-else-if="element.type === 'select'">
                       <label class="block mb-2 mt-4 relative">{{ element.label }}
                         <button class="absolute top-0 right-0 bg-yellow-200 text-sm"
@@ -95,7 +104,7 @@
                               </button>
                             </div>
                           </div>
-                          <h2 class="text-lg font-bold mb-4">Step 3 (Optional)</h2>
+                          <h2 class="text-lg font-bold mb-4 mt-4">Step 3 (Optional)</h2>
                           <label class="block mb-2 mt-4 relative">Who can access this form?
                             <button class="absolute top-0 right-0 bg-yellow-200 text-sm">e.g.
                               https://magiceden.io/marketplace/lily</button>
@@ -195,7 +204,7 @@
                   <DialogPanel
                     class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                     <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
-                      Confirm details - {{ formData.name }}, {{ formElements.length - 1 }} fields
+                      Confirm details - {{ formData.name }}
                     </DialogTitle>
                     <div class="mt-2" v-if="isTokenGated || isEncrypted">
                       <div v-if="isEncrypted">
@@ -546,6 +555,12 @@ const elements = [
     name: 'checkbox',
     label: 'Checkbox',
     type: 'checkbox',
+    required: null,
+  },
+  {
+    name: 'file',
+    label: 'Photo upload',
+    type: 'file',
     required: null,
   },
   {

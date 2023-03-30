@@ -17,6 +17,11 @@ export default defineNuxtConfig({
           'process.env.BROWSER': true
       }
   },
+  runtimeConfig: {
+    public: {
+      IMGBB_API: 'ce1628672996251db11cbd283f5e0af7',
+    }
+  },
   postcss: {
     plugins: {
       tailwindcss: {},
