@@ -496,8 +496,9 @@ async function submitConfig(id) {
     inputName = 'Untitled'
   }
   if (formElements.value[id].type == 'text' || formElements.value[id].type == 'textarea') {
-    inputPlaceholder = inputPlaceholder.trim()
-    if (inputPlaceholder.length < 1) {
+    try {
+      inputPlaceholder = inputPlaceholder.trim()
+    } catch (error) {
       inputPlaceholder = null
     }
   }
