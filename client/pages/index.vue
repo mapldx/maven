@@ -15,8 +15,7 @@
           </button>
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="https://layer.usemaven.app/forms/view/ej1a3v8lfry1mmf" target="_blank" class="text-sm font-semibold leading-6 text-gray-800">Get onboarded <span
-              aria-hidden="true">&rarr;</span></a>
+          <staging />
         </div>
       </nav>
     </header>
@@ -48,10 +47,7 @@
                 clip-rule="evenodd"></path>
             </svg>
           </a>
-          <a href="https://layer.usemaven.app/forms/view/ej1a3v8lfry1mmf" target="_blank"
-            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center rounded-lg border hover:bg-gray-100 focus:ring-4 text-black border-gray-700 focus:ring-gray-800 bg-white">
-            Get onboarded
-          </a>
+          <staging />
         </div>
         <div class="px-4 mx-auto text-center md:max-w-screen-md lg:max-w-screen-lg lg:px-36">
           <span class="font-semibold text-gray-400 uppercase">Built with best experience in mind for</span>
@@ -125,7 +121,7 @@
       <div class="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:flex lg:items-center lg:justify-between lg:px-8">
         <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Ready to make magic happen? 🫡<br />All features are free to use in beta.</h2>
         <div class="mt-10 flex items-center gap-x-6 lg:mt-0 lg:flex-shrink-0">
-          <a href="https://layer.usemaven.app/forms/view/ej1a3v8lfry1mmf" target="_blank" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get onboarded</a>
+          <staging />
           <a href="https://twitter.com/usemaven_" target="_blank" class="text-sm font-semibold leading-6 text-gray-900">Follow on Twitter <span aria-hidden="true">→</span></a>
         </div>
       </div>
