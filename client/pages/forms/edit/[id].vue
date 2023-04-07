@@ -104,13 +104,35 @@
                               </button>
                             </div>
                           </div>
-                          <h2 class="text-lg font-bold mb-4 mt-4">Step 3 (Optional)</h2>
+                          <h2 class="text-lg font-bold mt-4">Step 3 (Optional)</h2>
+                          <label class="block mb-2 mt-2 relative" v-if="selectedOption == 'Anyone can access at'">Who can access this form?</label>
+                          <label class="block mb-2 mt-2 relative" v-if="selectedOption == 'Only holders of'">Who can access this form?
+                            <p class="absolute top-0 right-0 text-sm">e.g.
+                              https://magiceden.io/marketplace/lily</p>
+                          </label>
+                          <p class="text-sm mb-4" v-if="selectedOption == 'Anyone can access at'">Forms with the same group name can be accessed at a unified landing page, https://layer.usemaven.app/forms/[group-name].</p>
+                          <div class="flex items-center">
+                            <div class="relative inline-flex">
+                              <select class="rounded-l-md border border-r-0 bg-gray-100 text-gray-600 appearance-none py-2 pl-3 pr-8" @change="updatePlaceholder">
+                                <option value="Option 1">Anyone can access at</option>
+                                <option value="Option 2">Only holders of</option>
+                              </select>
+                              <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                <svg class="h-4 w-4 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                  <path d="M10 12l-6-6h12z" />
+                                </svg>
+                              </div>
+                            </div>
+                            <input type="text" class="w-full p-2 pl-3 border rounded" pattern="[^\s]+" :placeholder="placeholder" v-model="targetEl">
+                          </div>
+                          <!--
                           <label class="block mb-2 mt-4 relative">Who can access this form?
                             <button class="absolute top-0 right-0 bg-yellow-200 text-sm">e.g.
                               https://magiceden.io/marketplace/lily</button>
                           </label>
                           <input type="text" class="w-full p-2 border rounded"
                             placeholder="Paste a Magic Eden marketplace link to your collection" v-model="targetEl" />
+                          -->
                           <h2 class="text-lg font-bold mb-4 mt-4">Step 4 (Optional)</h2>
                           <button class="bg-blue-500 text-white rounded p-2 hover:bg-blue-600" @click="openEncryptModal">
                             Enable encryption
@@ -119,7 +141,7 @@
                           <div class="mb-4">
                             <button class="bg-blue-500 text-white rounded p-2 hover:bg-blue-600"
                               @click="openConfirmModal">
-                              Create form
+                              Save form
                             </button>
                           </div>
                         </div>
@@ -206,13 +228,13 @@
                     <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
                       Confirm details - {{ formData.name }}
                     </DialogTitle>
-                    <div class="mt-2" v-if="isTokenGated || isEncrypted">
+                    <div class="mt-2" v-if="isTokenGated || isEncrypted || isGrouped">
                       <div v-if="isEncrypted">
-                        <h1 class="mb-2 text-sm">• Form response encryption is enabled for this form. Ensure that you have downloaded
+                        <h1 class="mb-2 text-sm">Form response encryption is enabled for this form. Ensure that you have downloaded
                         the private key for this form.</h1>
                       </div>
                       <div v-if="isTokenGated">
-                        <h1 class="mb-2"><span class="text-sm">• {{ targetEl }} holders are
+                        <h1 class="mb-2"><span class="text-sm">{{ targetEl }} holders are
                             granted access to your form if a match for any of the following are found in their
                             wallet:</span></h1>
                         <ul>
@@ -235,11 +257,28 @@
                           </ul>
                         </div>
                       </div>
+                      <div v-if="isGrouped">
+                        <h1 class="mb-2 text-sm">Automagically, a landing page for all your forms that share the same group name will be created for you.</h1>
+                        <div class="flex items-center mt-3 mb-3">
+                          <input
+                            id="groupModal"
+                            class="flex-1 bg-gray-200 rounded-l-lg px-4 py-2 text-gray-700 text-sm"
+                            type="text"
+                            :value="`https://layer.usemaven.app/forms/${targetEl}`"
+                          />
+                          <button
+                            class="bg-blue-500 hover:bg-blue-700 text-white rounded-r-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                            @click="copyToClipboard"
+                          >
+                            Copy
+                          </button>
+                        </div>
+                      </div>
                       <button class="mt-2 bg-blue-500 p-2 text-sm text-white rounded-md"
                         @click="createForm">Confirm</button>
                     </div>
                     <div class="mt-2" v-else>
-                      <h1 class="mb-2">This form is neither token-gated nor has its form responses encrypted.</h1>
+                      <h1 class="mb-2 text-sm">This form is neither grouped, token-gated, nor has its form responses encrypted. It is publicly accessible to anyone who has the link.</h1>
                       <button class="mt-2 bg-blue-500 p-2 text-sm text-white rounded-md"
                         @click="createForm">Confirm</button>
                     </div>
@@ -351,6 +390,28 @@ async function openEncryptModal() {
 var public_key = ref('')
 var agreeToTerms = ref(false)
 
+const selectedOption = ref('Anyone can access at')
+const placeholder = ref('Enter a group name for your form (no spaces)')
+
+function updatePlaceholder(event) {
+  if (event.target.value == 'Option 1') {
+    placeholder.value = 'Enter a group name for your form (no spaces)'
+    selectedOption.value = 'Anyone can access at'
+
+  }
+  if (event.target.value == 'Option 2') {
+    placeholder.value = 'Paste a Magic Eden link to your collection'
+    selectedOption.value = 'Only holders of'
+  }
+}
+
+function copyToClipboard() {
+  const inputElement = document.querySelector('#groupModal');
+  inputElement.select();
+  document.execCommand('copy');
+  $toast.success('Copied to clipboard!')
+}
+
 async function createEncryption() {
   const keyPair = await window.crypto.subtle.generateKey(
     {
@@ -404,15 +465,20 @@ function closeEncryptModal() {
 
 var isTokenGated = ref(false)
 var isEncrypted = ref(false)
+var isGrouped = ref(false)
 
 async function openConfirmModal() {
-  if (targetEl.value != '') {
+  if (targetEl.value != '' && selectedOption.value == 'Only holders of') {
     isTokenGated.value = true
+    await configureTarget()
+  }
+  if (targetEl.value != '' && selectedOption.value == 'Anyone can access at') {
+    isGrouped.value = true
+    targetEl.value = targetEl.value.replace(/\s+/g, "-");
   }
   if (agreeToTerms.value == true) {
     isEncrypted.value = true
   }
-  await configureTarget()
   isConfirmOpen.value = true
 }
 

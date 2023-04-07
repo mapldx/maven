@@ -68,7 +68,7 @@ async function renderForms() {
   await fetchForms()
   for (let i = 0; i < ids.value.length; i++) {
     const response = await axios.get(`https://api.usemaven.app/api/forms/get/${ids.value[i]}`)
-    console.log(response.data)
+    ids.value[i] = ids.value[i].replace("form-", "")
     const data = response.data
     forms.value.push({
       name: data.name,
