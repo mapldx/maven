@@ -31,7 +31,7 @@
               <div v-else-if="element.type === 'select'" class="mt-3">
                 <label class="block text-sm font-medium text-left text-gray-700">{{ element.label }}</label>
                 <select class="w-full p-2 border rounded" :required="element.required" v-model="element.value">
-                  <option v-for="option in element.options" :value="option.value">
+                  <option v-for="option in element.options" :value="option.label">
                     {{ option.label }}
                   </option>
                 </select>
@@ -196,6 +196,7 @@ const submitForm = async () => {
   }
   const address = wallet.publicKey.value.toString() || undefined
   var formData = formElements.value["fields"].reduce((acc, field) => {
+    console.log(field)
     return {
       timestamp: Date.now(),
       address: address,
