@@ -246,7 +246,7 @@ const handleFileUpload = async (event) => {
       header.value = maxKeys;
       isLoaded.value = true
     } catch (Exception) {
-      console.error(Exception);
+      $toast.error('Cannot decrypt with this key')
     }
   };
   reader.readAsText(file);
