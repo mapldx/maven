@@ -150,15 +150,14 @@ onMounted(async () => {
     for (let i = 0; i < responses.value.length; i++) {
       responses.value[i].timestamp = new Date(responses.value[i].timestamp).toLocaleString()
     }
-    var header_first = Object.keys(responses.value[0]);
-    console.log('First response has: ' + header_first.length)
-    var header_newest = Object.keys(responses.value[responses.value.length - 1]);
-    console.log('Newest response has: ' + header_newest.length)
-    if (header_first.length > header_newest.length) {
-      header.value = header_first
-    } else {
-      header.value = header_newest
+    let maxKeys = [];
+    for (let i = 0; i < responses.value.length; i++) {
+      const keys = Object.keys(responses.value[i]);
+      if (keys.length > maxKeys.length) {
+        maxKeys = keys;
+      }
     }
+    header.value = maxKeys;
     isLoaded.value = true
   }
 })
@@ -237,13 +236,14 @@ const handleFileUpload = async (event) => {
       for (let i = 0; i < responses.value.length; i++) {
         responses.value[i].timestamp = new Date(responses.value[i].timestamp).toLocaleString()
       }
-      var header_first = Object.keys(responses.value[0]);
-      var header_newest = Object.keys(responses.value[responses.value.length - 1]);
-      if (header_first.length > header_newest.length) {
-        header.value = header_first
-      } else {
-        header.value = header_newest
+      let maxKeys = [];
+      for (let i = 0; i < responses.value.length; i++) {
+        const keys = Object.keys(responses.value[i]);
+        if (keys.length > maxKeys.length) {
+          maxKeys = keys;
+        }
       }
+      header.value = maxKeys;
       isLoaded.value = true
     } catch (Exception) {
       console.error(Exception);
@@ -310,13 +310,14 @@ async function downloadCSV() {
 function convertToCSV(jsonData) {
   const items = jsonData.data;
   const replacer = (key, value) => (value === null ? '' : value);
-  var header_first = Object.keys(items[0]);
-  var header_newest = Object.keys(items[items.length - 1]);
-  if (header_first.length > header_newest.length) {
-    var header = header_first
-  } else {
-    var header = header_newest
+  let maxKeys = [];
+  for (let i = 0; i < items.length; i++) {
+    const keys = Object.keys(items[i]);
+    if (keys.length > maxKeys.length) {
+      maxKeys = keys;
+    }
   }
+  const header = maxKeys;
   const csv = [
     header.join(','),
     ...items.map((row) =>

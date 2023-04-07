@@ -30,56 +30,59 @@
                       <img :src="formElements[0].src" alt="Header Photo" class="w-full h-auto">
                     </div>
                   </div>
-                  <div v-for="(element, index) in formElements" :key="index">
-                    <div v-if="element.type === 'text'">
-                      <label class="block mb-2 mt-4 relative">{{ element.label }}
-                        <button class="absolute top-0 right-0 bg-yellow-200 text-sm"
-                          @click="openModal(element.id, element.type)">Set up</button>
-                        <button class="absolute top-0 right-0 mr-14 bg-red-200 text-sm"
-                          @click="deleteField(element.id)">Delete</button>
-                      </label>
-                      <input type="text" class="w-full p-2 border rounded" :placeholder="element.placeholder" />
-                    </div>
-                    <div v-else-if="element.type === 'textarea'">
-                      <label class="block mb-2 mt-4 relative">{{ element.label }}
-                        <button class="absolute top-0 right-0 bg-yellow-200 text-sm"
-                          @click="openModal(element.id, element.type)">Set up</button>
-                        <button class="absolute top-0 right-0 mr-14 bg-red-200 text-sm"
-                          @click="deleteField(element.id)">Delete</button>
-                      </label>
-                      <textarea class="w-full p-2 border rounded" :placeholder="element.placeholder"></textarea>
-                    </div>
-                    <div v-else-if="element.type === 'file'">
-                      <label class="block mb-2 mt-4 relative">{{ element.label }}
-                        <button class="absolute top-0 right-0 bg-yellow-200 text-sm"
-                          @click="openModal(element.id, element.type)">Set up</button>
-                        <button class="absolute top-0 right-0 mr-14 bg-red-200 text-sm"
-                          @click="deleteField(element.id)">Delete</button>
-                      </label>
-                      <input type="file" class="w-full border rounded">
-                    </div>
-                    <div v-else-if="element.type === 'select'">
-                      <label class="block mb-2 mt-4 relative">{{ element.label }}
-                        <button class="absolute top-0 right-0 bg-yellow-200 text-sm"
-                          @click="openModal(element.id, element.type)">Set up</button>
-                        <button class="absolute top-0 right-0 mr-14 bg-red-200 text-sm"
-                          @click="deleteField(element.id)">Delete</button>
-                      </label>
-                      <select class="w-full p-2 border rounded">
-                        <option v-for="option in element.options" :value="option.value">
-                          {{ option.label }}
-                        </option>
-                      </select>
-                    </div>
-                    <div v-else-if="element.type === 'checkbox'">
-                      <button class="mr-3 bg-red-200 text-sm" @click="deleteField(element.id)">Delete</button>
-                      <button class=" bg-yellow-200 text-sm" @click="openModal(element.id, element.type)">Set up</button>
-                      <div class="flex items-center mt-2">
-                        <input type="checkbox" class="mr-2" />
-                        <label class="block">{{ element.label }}</label>
+                  <draggable v-model="formElements" @end="updateIds">
+                    <template v-for="(element, index) in formElements" :key="index" v-slot:item="{ element }">
+                      <div v-if="element.type === 'text'">
+                        <label class="block mb-2 mt-4 relative">{{ element.label }}
+                          <button class="absolute top-0 right-0 bg-yellow-200 text-sm"
+                            @click="openModal(element.id, element.type)">Set up</button>
+                          <button class="absolute top-0 right-0 mr-14 bg-red-200 text-sm"
+                            @click="deleteField(element.id)">Delete</button>
+                        </label>
+                        <input type="text" class="w-full p-2 border rounded" :placeholder="element.placeholder" />
                       </div>
-                    </div>
-                  </div>
+                      <div v-else-if="element.type === 'textarea'">
+                        <label class="block mb-2 mt-4 relative">{{ element.label }}
+                          <button class="absolute top-0 right-0 bg-yellow-200 text-sm"
+                            @click="openModal(element.id, element.type)">Set up</button>
+                          <button class="absolute top-0 right-0 mr-14 bg-red-200 text-sm"
+                            @click="deleteField(element.id)">Delete</button>
+                        </label>
+                        <textarea class="w-full p-2 border rounded" :placeholder="element.placeholder"></textarea>
+                      </div>
+                      <div v-else-if="element.type === 'file'">
+                        <label class="block mb-2 mt-4 relative">{{ element.label }}
+                          <button class="absolute top-0 right-0 bg-yellow-200 text-sm"
+                            @click="openModal(element.id, element.type)">Set up</button>
+                          <button class="absolute top-0 right-0 mr-14 bg-red-200 text-sm"
+                            @click="deleteField(element.id)">Delete</button>
+                        </label>
+                        <input type="file" class="w-full border rounded">
+                      </div>
+                      <div v-else-if="element.type === 'select'">
+                        <label class="block mb-2 mt-4 relative">{{ element.label }}
+                          <button class="absolute top-0 right-0 bg-yellow-200 text-sm"
+                            @click="openModal(element.id, element.type)">Set up</button>
+                          <button class="absolute top-0 right-0 mr-14 bg-red-200 text-sm"
+                            @click="deleteField(element.id)">Delete</button>
+                        </label>
+                        <select class="w-full p-2 border rounded">
+                          <option v-for="option in element.options" :value="option.value">
+                            {{ option.label }}
+                          </option>
+                        </select>
+                      </div>
+                      <div v-else-if="element.type === 'checkbox'">
+                        <button class="mr-3 bg-red-200 text-sm" @click="deleteField(element.id)">Delete</button>
+                        <button class=" bg-yellow-200 text-sm" @click="openModal(element.id, element.type)">Set
+                          up</button>
+                        <div class="flex items-center mt-2">
+                          <input type="checkbox" class="mr-2" />
+                          <label class="block">{{ element.label }}</label>
+                        </div>
+                      </div>
+                    </template>
+                  </draggable>
                   <button class="p-2 bg-blue-500 mt-4 rounded-md text-md text-white font-semibold">Submit form</button>
                 </div>
                 <div class="grid grid-cols-1 gap-4 lg:col-span-2">
@@ -105,25 +108,33 @@
                             </div>
                           </div>
                           <h2 class="text-lg font-bold mt-4">Step 3 (Optional)</h2>
-                          <label class="block mb-2 mt-2 relative" v-if="selectedOption == 'Anyone can access at'">Who can access this form?</label>
-                          <label class="block mb-2 mt-2 relative" v-if="selectedOption == 'Only holders of'">Who can access this form?
+                          <label class="block mb-2 mt-2 relative" v-if="selectedOption == 'Anyone can access at'">Who can
+                            access this form?</label>
+                          <label class="block mb-2 mt-2 relative" v-if="selectedOption == 'Only holders of'">Who can
+                            access this form?
                             <p class="absolute top-0 right-0 text-sm">e.g.
                               https://magiceden.io/marketplace/lily</p>
                           </label>
-                          <p class="text-sm mb-4" v-if="selectedOption == 'Anyone can access at'">Forms with the same group name can be accessed at a unified landing page, https://layer.usemaven.app/forms/[group-name].</p>
+                          <p class="text-sm mb-4" v-if="selectedOption == 'Anyone can access at'">Forms with the same
+                            group name can be accessed at a unified landing page,
+                            https://layer.usemaven.app/forms/[group-name].</p>
                           <div class="flex items-center">
                             <div class="relative inline-flex">
-                              <select class="rounded-l-md border border-r-0 bg-gray-100 text-gray-600 appearance-none py-2 pl-3 pr-8" @change="updatePlaceholder">
+                              <select
+                                class="rounded-l-md border border-r-0 bg-gray-100 text-gray-600 appearance-none py-2 pl-3 pr-8"
+                                @change="updatePlaceholder">
                                 <option value="Option 1">Anyone can access at</option>
                                 <option value="Option 2">Only holders of</option>
                               </select>
                               <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                                <svg class="h-4 w-4 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <svg class="h-4 w-4 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 20 20">
                                   <path d="M10 12l-6-6h12z" />
                                 </svg>
                               </div>
                             </div>
-                            <input type="text" class="w-full p-2 pl-3 border rounded" pattern="[^\s]+" :placeholder="placeholder" v-model="targetEl">
+                            <input type="text" class="w-full p-2 pl-3 border rounded" pattern="[^\s]+"
+                              :placeholder="placeholder" v-model="targetEl">
                           </div>
                           <!--
                           <label class="block mb-2 mt-4 relative">Who can access this form?
@@ -230,8 +241,9 @@
                     </DialogTitle>
                     <div class="mt-2" v-if="isTokenGated || isEncrypted || isGrouped">
                       <div v-if="isEncrypted">
-                        <h1 class="mb-2 text-sm">Form response encryption is enabled for this form. Ensure that you have downloaded
-                        the private key for this form.</h1>
+                        <h1 class="mb-2 text-sm">Form response encryption is enabled for this form. Ensure that you have
+                          downloaded
+                          the private key for this form.</h1>
                       </div>
                       <div v-if="isTokenGated">
                         <h1 class="mb-2"><span class="text-sm">{{ targetEl }} holders are
@@ -258,18 +270,14 @@
                         </div>
                       </div>
                       <div v-if="isGrouped">
-                        <h1 class="mb-2 text-sm">Automagically, a landing page for all your forms that share the same group name will be created for you.</h1>
+                        <h1 class="mb-2 text-sm">Automagically, a landing page for all your forms that share the same
+                          group name will be created for you.</h1>
                         <div class="flex items-center mt-3 mb-3">
-                          <input
-                            id="groupModal"
-                            class="flex-1 bg-gray-200 rounded-l-lg px-4 py-2 text-gray-700 text-sm"
-                            type="text"
-                            :value="`https://layer.usemaven.app/forms/${targetEl}`"
-                          />
+                          <input id="groupModal" class="flex-1 bg-gray-200 rounded-l-lg px-4 py-2 text-gray-700 text-sm"
+                            type="text" :value="`https://layer.usemaven.app/forms/${targetEl}`" />
                           <button
                             class="bg-blue-500 hover:bg-blue-700 text-white rounded-r-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
-                            @click="copyToClipboard"
-                          >
+                            @click="copyToClipboard">
                             Copy
                           </button>
                         </div>
@@ -278,7 +286,8 @@
                         @click="createForm">Confirm</button>
                     </div>
                     <div class="mt-2" v-else>
-                      <h1 class="mb-2 text-sm">This form is neither grouped, token-gated, nor has its form responses encrypted. It is publicly accessible to anyone who has the link.</h1>
+                      <h1 class="mb-2 text-sm">This form is neither grouped, token-gated, nor has its form responses
+                        encrypted. It is publicly accessible to anyone who has the link.</h1>
                       <button class="mt-2 bg-blue-500 p-2 text-sm text-white rounded-md"
                         @click="createForm">Confirm</button>
                     </div>
@@ -307,7 +316,8 @@
                     <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
                       Create encryption keys for {{ formData.name }}
                     </DialogTitle>
-                    <div class="text-sm mt-2 mb-2">This encrypts your form's responses so that only you can read them.</div>
+                    <div class="text-sm mt-2 mb-2">This encrypts your form's responses so that only you can read them.
+                    </div>
                     <div class="text-sm mt-2">
                       <h1 class="mb-1">Read carefully:</h1>
                       <ul>
@@ -324,7 +334,8 @@
                         <span class="ml-2 text-sm">I understand</span>
                       </label>
                     </div>
-                    <button :disabled="!isEncrypted" class="mt-2 bg-blue-500 p-2 text-sm text-white rounded-md disabled:bg-gray-300"
+                    <button :disabled="!isEncrypted"
+                      class="mt-2 bg-blue-500 p-2 text-sm text-white rounded-md disabled:bg-gray-300"
                       @click="createEncryption">Download key</button>
                   </DialogPanel>
                 </TransitionChild>
@@ -354,6 +365,8 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/vue'
+
+import draggable from 'vuedraggable'
 
 const route = useRoute()
 const formData = ref({})
@@ -396,6 +409,13 @@ async function openEncryptModal() {
 
 var public_key = ref('')
 var agreeToTerms = ref(false)
+
+async function updateIds() {
+  for (let i = 1; i < formElements.value.length; i++) {
+    formElements.value[i].id = i;
+  }
+  console.log(formElements.value)
+}
 
 const selectedOption = ref('Anyone can access at')
 const placeholder = ref('Enter a group name for your form (no spaces)')
@@ -731,5 +751,4 @@ img {
 .sticky {
   position: sticky;
   top: 0;
-}
-</style>
+}</style>
