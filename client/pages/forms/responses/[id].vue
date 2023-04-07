@@ -37,7 +37,7 @@
                           <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">#
                           </th>
                           <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                            v-for="label in Object.keys(responses[0])" :key="label">{{ label }}</th>
+                            v-for="label in header" :key="label">{{ label }}</th>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 bg-white">
@@ -45,7 +45,7 @@
                           <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ index
                           }}</td>
                           <td class="whitespace-normal px-3 py-4 text-sm text-gray-500"
-                            v-for="field in Object.keys(responses[0])" :key="field">{{ response[field] }}</td>
+                            v-for="field in header" :key="field">{{ response[field] }}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -104,6 +104,8 @@ var stats = ref([])
 var isEncrypted = ref(false)
 var { $toast } = useNuxtApp()
 
+var header = ref([])
+
 onMounted(async () => {
   const { data } = await axios.get(`https://api.usemaven.app/api/forms/get/${id}`)
   formData.value = data
@@ -147,6 +149,13 @@ onMounted(async () => {
     ]
     for (let i = 0; i < responses.value.length; i++) {
       responses.value[i].timestamp = new Date(responses.value[i].timestamp).toLocaleString()
+    }
+    var header_first = Object.keys(responses.value[0]);
+    var header_newest = Object.keys(responses.value[responses.value.length - 1]);
+    if (header_first > header_newest) {
+      header.value = header_first
+    } else {
+      header.value = header_newest
     }
     isLoaded.value = true
   }
@@ -226,6 +235,13 @@ const handleFileUpload = async (event) => {
       for (let i = 0; i < responses.value.length; i++) {
         responses.value[i].timestamp = new Date(responses.value[i].timestamp).toLocaleString()
       }
+      var header_first = Object.keys(responses.value[0]);
+      var header_newest = Object.keys(responses.value[responses.value.length - 1]);
+      if (header_first > header_newest) {
+        header.value = header_first
+      } else {
+        header.value = header_newest
+      }
       isLoaded.value = true
     } catch (Exception) {
       console.error(Exception);
@@ -292,7 +308,13 @@ async function downloadCSV() {
 function convertToCSV(jsonData) {
   const items = jsonData.data;
   const replacer = (key, value) => (value === null ? '' : value);
-  const header = Object.keys(items[0]);
+  var header_first = Object.keys(items[0]);
+  var header_newest = Object.keys(items[items.length - 1]);
+  if (header_first > header_newest) {
+    var header = header_first
+  } else {
+    var header = header_newest
+  }
   const csv = [
     header.join(','),
     ...items.map((row) =>

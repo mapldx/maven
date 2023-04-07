@@ -320,11 +320,11 @@
                     </div>
                     <div class="mt-2">
                       <label class="inline-flex items-center">
-                        <input type="checkbox" class="form-checkbox" v-model="agreeToTerms">
+                        <input type="checkbox" class="form-checkbox" v-model="isEncrypted">
                         <span class="ml-2 text-sm">I understand</span>
                       </label>
                     </div>
-                    <button :disabled="!agreeToTerms" class="mt-2 bg-blue-500 p-2 text-sm text-white rounded-md disabled:bg-gray-300"
+                    <button :disabled="!isEncrypted" class="mt-2 bg-blue-500 p-2 text-sm text-white rounded-md disabled:bg-gray-300"
                       @click="createEncryption">Download key</button>
                   </DialogPanel>
                 </TransitionChild>
@@ -367,12 +367,19 @@ onBeforeMount(async () => {
   formData.value = response.data // fields here
   if (formData.value.fields != null) {
     formElements.value = JSON.parse(formData.value.fields)
+    el = formElements.value.length - 1
+    console.log(formElements.value)
     if (formData.value.encryption != null) {
+      public_key.value = formData.value.encryption
       isEncrypted.value = true
+    }
+    if (formData.value.target != null) {
+      targetEl.value = formData.value.target
     }
   }
   isLoaded.value = true
   console.log(formData.value)
+  console.log(isEncrypted.value + ' is encrypted')
 })
 
 const isOpen = ref(false)
