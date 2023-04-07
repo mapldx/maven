@@ -2,14 +2,13 @@
   <main>
     <div class="min-h-full" v-if="isLoaded">
       <NavBar />
-
       <div class="py-10" v-if="isLoaded">
         <header>
           <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900">Your Documents</h1>
           </div>
         </header>
-        <main>
+        <main class="mb-24">
           <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="px-4 py-8 sm:px-0">
               <div class="">
@@ -124,6 +123,7 @@
             </div>
           </div>
         </main>
+        <!--
         <div>
           <div class="fixed bottom-0 left-0 w-full">
             <div class="bg-gray-200 text-center py-4">
@@ -133,6 +133,7 @@
             </div>
           </div>
         </div>
+        -->
       </div>
     </div>
     <div class="min-h-screen" v-else>
