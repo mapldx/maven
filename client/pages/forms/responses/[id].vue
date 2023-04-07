@@ -151,8 +151,10 @@ onMounted(async () => {
       responses.value[i].timestamp = new Date(responses.value[i].timestamp).toLocaleString()
     }
     var header_first = Object.keys(responses.value[0]);
+    console.log('First response has: ' + header_first.length)
     var header_newest = Object.keys(responses.value[responses.value.length - 1]);
-    if (header_first > header_newest) {
+    console.log('Newest response has: ' + header_newest.length)
+    if (header_first.length > header_newest.length) {
       header.value = header_first
     } else {
       header.value = header_newest
@@ -237,7 +239,7 @@ const handleFileUpload = async (event) => {
       }
       var header_first = Object.keys(responses.value[0]);
       var header_newest = Object.keys(responses.value[responses.value.length - 1]);
-      if (header_first > header_newest) {
+      if (header_first.length > header_newest.length) {
         header.value = header_first
       } else {
         header.value = header_newest
@@ -310,7 +312,7 @@ function convertToCSV(jsonData) {
   const replacer = (key, value) => (value === null ? '' : value);
   var header_first = Object.keys(items[0]);
   var header_newest = Object.keys(items[items.length - 1]);
-  if (header_first > header_newest) {
+  if (header_first.length > header_newest.length) {
     var header = header_first
   } else {
     var header = header_newest
